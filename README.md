@@ -1,54 +1,42 @@
-# .
+# Velociraptor
 
-This template should help get you started developing with Vue 3 in Vite.
+**Sprint capacity planning that actually works.**
 
-## Recommended IDE Setup
+Velociraptor answers the question every scrum team asks at sprint planning: *"How many points should we commit to?"*
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+It learns from your team's history. Log what you completed and how many leave days you had. Velociraptor normalizes for availability, so a holiday-heavy sprint doesn't skew your averages. When planning, enter expected leave days and get an accurate recommendation based on real data.
 
-## Recommended Browser Setup
+No more guessing. No more overcommitting because half the team is on holiday.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+---
 
-## Type Support for `.vue` Imports in TS
+## Development Setup
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Prerequisites
 
-## Customize configuration
+- Node.js 20.19+ or 22.12+ (see `.nvmrc`)
+- npm
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+### Install & Run
 
 ```sh
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Available Scripts
 
-```sh
-npm run build
-```
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server with hot reload |
+| `npm run build` | Type-check and build for production |
+| `npm run test:unit` | Run unit tests with Vitest |
+| `npm run lint` | Lint with ESLint |
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### IDE Setup
 
-```sh
-npm run test:unit
-```
+[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) extension.
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+For Vue devtools in your browser:
+- [Chrome/Edge](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+- [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)

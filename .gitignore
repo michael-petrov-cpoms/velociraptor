@@ -34,6 +34,3 @@ coverage
 
 # Vitest
 __screenshots__/
-
-# Project docs (not for version control)
-docs/
