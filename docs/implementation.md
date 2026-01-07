@@ -93,9 +93,27 @@ if (availableDays < 1) → validation error: "Leave days too high"
 |------------|-------|
 | **No authentication** | Anyone with URL can access. Secure with Firebase Auth post-MVP. |
 | **No offline support** | Requires internet connection. Firestore offline can be added later. |
-| **Desktop-focused** | NES.css may not be fully responsive. Mobile testing deferred. |
+| **Desktop-focused** | Mobile responsive design deferred to post-MVP. |
 | **Last-write-wins** | No conflict resolution for concurrent edits. |
-| **Accessibility** | Pixel font may have readability issues. Consider "readable mode" later. |
+
+---
+
+## Pre-build Prerequisites
+
+### FeatherUI Registry Access (One-time Setup)
+
+Before installing FeatherUI, configure access to the private GitLab registry:
+
+1. Ensure you have a `GITLAB_TOKEN` environment variable set with read access to @raptor packages
+2. Create `.yarnrc.yml` in project root:
+   ```yaml
+   npmScopes:
+     raptor:
+       npmRegistryServer: 'https://gitlab.com/api/v4/projects/56583104/packages/npm'
+       npmAuthToken: "${GITLAB_TOKEN:-dummy}"
+       npmAlwaysAuth: true
+   ```
+3. Add `.yarnrc.yml` to `.gitignore` if it contains sensitive tokens
 
 ---
 
@@ -107,12 +125,21 @@ if (availableDays < 1) → validation error: "Leave days too high"
 - [x] Run `npm install` and verify `npm run dev` works
 - [x] Commit: "chore: scaffold Vue 3 project"
 
-### Step 1.2: Add NES.css
-- [ ] Install NES.css (`npm install nes.css`)
-- [ ] Import in main.ts or App.vue
-- [ ] Add Press Start 2P font (Google Fonts)
-- [ ] Create test button to verify 8-bit styling works
-- [ ] Commit: "feat: add NES.css retro styling"
+### Step 1.2: Add FeatherUI
+- [ ] Install FeatherUI and Sass (`yarn add @raptor/feather-ui` and `yarn add -D sass`)
+- [ ] Update `src/main.ts`:
+  - Import FeatherUI CSS: `import '@raptor/feather-ui/feather-ui.css'`
+  - Import and register FeatherUI plugin: `import FeatherUI, { FEATHER_LOCALE_KEY } from '@raptor/feather-ui'`
+  - Import icons: `import IconsPath from '@raptor/feather-ui/icons.svg'`
+  - Use plugin: `.use(FeatherUI)`
+  - Provide locale: `.provide(FEATHER_LOCALE_KEY, 'en-gb')`
+  - Provide icons: `.provide('iconsSvgPath', IconsPath)`
+- [ ] Update `vite.config.ts`:
+  - Add `optimizeDeps: { exclude: ['@raptor/feather-ui'] }`
+  - Add SCSS preprocessor config: `css: { preprocessorOptions: { scss: { additionalData: '@import "@raptor/feather-ui/_base.scss";' } } }`
+- [ ] Add TypeScript declaration in `env.d.ts`: `declare module '@raptor/feather-ui'`
+- [ ] Create test component with `<f-button text="Test" type="primary" />` to verify styling works
+- [ ] Commit: "feat: add FeatherUI component library"
 
 ### Step 1.3: Firebase Setup
 - [ ] Create Firebase project in console
@@ -184,7 +211,7 @@ if (availableDays < 1) → validation error: "Leave days too high"
 
 ### Step 3.1: Home / Team List
 - [ ] Create `src/views/HomeView.vue`
-- [ ] Display list of teams using NES.css list/container styles
+- [ ] Display list of teams using FeatherUI layout components
 - [ ] Show quick stats per team:
   - Sprint count (number of logged sprints)
   - Last velocity (most recent sprint's raw `pointsCompleted`, or "No sprints" if none)
@@ -198,9 +225,9 @@ if (availableDays < 1) → validation error: "Leave days too high"
 - [ ] Create `src/components/CreateTeamModal.vue`
 - [ ] Form fields: name, memberCount, developerCount, sprintLengthDays, baselineVelocity (optional)
 - [ ] Label baselineVelocity as "Expected points per sprint" for clarity
-- [ ] Use NES.css form elements (nes-input, nes-btn)
+- [ ] Use FeatherUI form components (`<f-form>`, `<form-input>`, `<f-button>`)
 - [ ] Implement validation per rules above
-- [ ] Display validation errors with NES.css styling
+- [ ] Display validation errors with FeatherUI styling
 - [ ] Write component tests
 - [ ] Commit: "feat: add create team modal"
 
@@ -250,7 +277,7 @@ if (availableDays < 1) → validation error: "Leave days too high"
   - **Recommended points**: `recommendedPoints` (rounded down)
   - **Capacity %**: `capacityPercentage` (e.g., "Team is at 85% capacity")
   - **Comparison**: `comparisonDelta` (e.g., "-5 points vs full capacity" or "Full capacity")
-- [ ] Use NES.css progress bar for capacity visualization
+- [ ] Create custom capacity visualization bar (styled div or CSS progress)
 - [ ] Handle teams with no history:
   - If baseline exists: use baseline, show "Based on baseline estimate"
   - If no baseline: show message to log sprints first
@@ -262,7 +289,7 @@ if (availableDays < 1) → validation error: "Leave days too high"
 ## Phase 4: Polish & Deploy
 
 ### Step 4.1: Error Handling & Loading States
-- [ ] Add loading spinners (NES.css has loading styles)
+- [ ] Add loading spinners (`<f-loading-spinner>` from FeatherUI)
 - [ ] Add error messages for failed Firestore operations
 - [ ] Add confirmation dialogs for delete actions (team and sprint)
 - [ ] Handle network errors gracefully
