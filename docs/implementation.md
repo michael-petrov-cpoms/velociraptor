@@ -102,18 +102,12 @@ if (availableDays < 1) → validation error: "Leave days too high"
 
 ### FeatherUI Registry Access (One-time Setup)
 
-Before installing FeatherUI, configure access to the private GitLab registry:
+Before Step 1.2, the user must configure GitLab registry access for `@raptor/feather-ui`.
 
-1. Ensure you have a `GITLAB_TOKEN` environment variable set with read access to @raptor packages
-2. Create `.yarnrc.yml` in project root:
-   ```yaml
-   npmScopes:
-     raptor:
-       npmRegistryServer: 'https://gitlab.com/api/v4/projects/56583104/packages/npm'
-       npmAuthToken: "${GITLAB_TOKEN:-dummy}"
-       npmAlwaysAuth: true
-   ```
-3. Add `.yarnrc.yml` to `.gitignore` if it contains sensitive tokens
+👉 **See [`feather-installation-instructions.md`](./feather-installation-instructions.md)** for complete setup instructions including:
+- How to get a GitLab Personal Access Token
+- Setting up the `GITLAB_TOKEN` environment variable
+- Creating `.yarnrc.yml` for the private registry
 
 ---
 
@@ -125,21 +119,24 @@ Before installing FeatherUI, configure access to the private GitLab registry:
 - [x] Run `npm install` and verify `npm run dev` works
 - [x] Commit: "chore: scaffold Vue 3 project"
 
-### Step 1.2: Add FeatherUI
-- [ ] Install FeatherUI and Sass (`yarn add @raptor/feather-ui` and `yarn add -D sass`)
-- [ ] Update `src/main.ts`:
+### Step 1.2: Add FeatherUI ✓
+
+> 📖 **Reference**: See [`feather-installation-instructions.md`](./feather-installation-instructions.md) for complete code examples
+
+- [x] Install FeatherUI and Sass (`yarn add @raptor/feather-ui` and `yarn add -D sass`)
+- [x] Update `src/main.ts`:
   - Import FeatherUI CSS: `import '@raptor/feather-ui/feather-ui.css'`
   - Import and register FeatherUI plugin: `import FeatherUI, { FEATHER_LOCALE_KEY } from '@raptor/feather-ui'`
   - Import icons: `import IconsPath from '@raptor/feather-ui/icons.svg'`
   - Use plugin: `.use(FeatherUI)`
   - Provide locale: `.provide(FEATHER_LOCALE_KEY, 'en-gb')`
   - Provide icons: `.provide('iconsSvgPath', IconsPath)`
-- [ ] Update `vite.config.ts`:
+- [x] Update `vite.config.ts`:
   - Add `optimizeDeps: { exclude: ['@raptor/feather-ui'] }`
   - Add SCSS preprocessor config: `css: { preprocessorOptions: { scss: { additionalData: '@import "@raptor/feather-ui/_base.scss";' } } }`
-- [ ] Add TypeScript declaration in `env.d.ts`: `declare module '@raptor/feather-ui'`
-- [ ] Create test component with `<f-button text="Test" type="primary" />` to verify styling works
-- [ ] Commit: "feat: add FeatherUI component library"
+- [x] Add TypeScript declaration in `env.d.ts`: `declare module '@raptor/feather-ui'`
+- [x] Create test component with `<f-button text="Test" type="primary" />` to verify styling works
+- [x] Commit: "feat: add FeatherUI component library"
 
 ### Step 1.3: Firebase Setup
 - [ ] Create Firebase project in console
