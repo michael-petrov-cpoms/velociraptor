@@ -138,13 +138,13 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Create test component with `<f-button text="Test" type="primary" />` to verify styling works
 - [x] Commit: "feat: add FeatherUI component library"
 
-### Step 1.3: Firebase Setup
-- [ ] Create Firebase project in console
-- [ ] Enable Firestore database
-- [ ] Install firebase and vuefire packages (`npm install firebase vuefire`)
-- [ ] Create `src/firebase/config.ts` with initialization
-- [ ] Create `.env` file with Firebase config (add to .gitignore)
-- [ ] Commit: "chore: configure Firebase project"
+### Step 1.3: Firebase Setup ✓
+- [x] Create Firebase project in console
+- [x] Enable Firestore database
+- [x] Install firebase and vuefire packages (`npm install firebase vuefire`)
+- [x] Create `src/firebase/config.ts` with initialization
+- [x] Create `.env.local` file with Firebase config (add to .gitignore)
+- [x] Commit: "chore: configure Firebase project"
 
 ### Step 1.4: Define Types
 - [ ] Create `src/types/index.ts`
