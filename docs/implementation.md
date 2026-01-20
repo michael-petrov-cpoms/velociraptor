@@ -152,12 +152,12 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Define `Sprint` interface (see Data Model above)
 - [x] Commit: "feat: add TypeScript types for Team and Sprint"
 
-### Step 1.5: Set Up Router
-- [ ] Define routes: `/` (home), `/team/:id`, `/team/:id/log`, `/team/:id/plan`
-- [ ] Create placeholder view components
-- [ ] Test navigation works
-- [ ] Note: Create Team, Edit Team, Edit Sprint are modals (no dedicated routes)
-- [ ] Commit: "feat: configure vue-router with app routes"
+### Step 1.5: Set Up Router ✓
+- [x] Define routes: `/` (home), `/team/:id`, `/team/:id/log`, `/team/:id/plan`
+- [x] Create placeholder view components
+- [x] Test navigation works
+- [x] Note: Create Team, Edit Team, Edit Sprint are modals (no dedicated routes)
+- [x] Commit: "feat: configure vue-router with app routes"
 
 ---
 
