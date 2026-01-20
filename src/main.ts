@@ -1,4 +1,5 @@
 import '@raptor/feather-ui/feather-ui.css'
+import './assets/main.css'
 import FeatherUI, { FEATHER_LOCALE_KEY } from '@raptor/feather-ui'
 import IconsPath from '@raptor/feather-ui/icons.svg'
 

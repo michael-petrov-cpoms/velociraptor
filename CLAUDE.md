@@ -209,6 +209,54 @@ After every 3-5 assistant messages, verify:
 
 ---
 
+## Commit Workflow
+
+When the user asks to commit, perform ALL of the following steps:
+
+### 1. Update implementation.md
+- Open `docs/implementation.md`
+- Mark completed items with `[x]` and add ✓ to the step heading
+- Save the file
+
+### 2. Stage and Commit
+- Run `git status` to review changes
+- Stage only the files relevant to this implementation step (not prompts or docs)
+- Commit with the message specified in implementation.md for that step
+- **Do NOT include any AI co-author or mention of Claude**
+
+### 3. Create PR Description
+- Create `prompts/pr/pr-{branch-name}.md`
+- Include:
+  - Summary of what was done
+  - Files added/modified
+  - Technical decisions made
+  - Testing performed
+  - Reference to implementation.md step
+
+### 4. Create Next Session Prompt
+- Create `prompts/initial_prompt_{next-step}.md`
+- Follow the pattern from `prompts/initial_prompt_1.5.md`:
+  ```
+  Read '/path/to/velociraptor-product-overview.md' and '/path/to/implementation.md'.
+  Let's make a plan for step {X.Y} of the implementation and do it.
+  Before we start, verify that the previous steps are complete.
+  Interview me with anything that isn't clear.
+  Also before you start, check out a new branch, following the naming conventions we have been using so far.
+  ```
+
+### Example Commit Flow
+```
+User: "commit this"
+
+Claude:
+1. ✓ Updated docs/implementation.md (Step 1.5 marked complete)
+2. ✓ Staged relevant files, committed: "feat: configure vue-router with app routes"
+3. ✓ Created prompts/pr/pr-feat-setup-router.md
+4. ✓ Created prompts/initial_prompt_2.1.md
+```
+
+---
+
 ## Quality & Error Recovery
 
 ### Quality Gates
