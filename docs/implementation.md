@@ -146,11 +146,11 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Create `.env.local` file with Firebase config (add to .gitignore)
 - [x] Commit: "chore: configure Firebase project"
 
-### Step 1.4: Define Types
-- [ ] Create `src/types/index.ts`
-- [ ] Define `Team` interface (see Data Model above)
-- [ ] Define `Sprint` interface (see Data Model above)
-- [ ] Commit: "feat: add TypeScript types for Team and Sprint"
+### Step 1.4: Define Types ✓
+- [x] Create `src/types/index.ts`
+- [x] Define `Team` interface (see Data Model above)
+- [x] Define `Sprint` interface (see Data Model above)
+- [x] Commit: "feat: add TypeScript types for Team and Sprint"
 
 ### Step 1.5: Set Up Router
 - [ ] Define routes: `/` (home), `/team/:id`, `/team/:id/log`, `/team/:id/plan`
