@@ -36,3 +36,6 @@ coverage
 
 # Vitest
 __screenshots__/
+
+# Local prompts
+prompts/
