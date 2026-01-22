@@ -163,12 +163,12 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 
 ## Phase 2: Core Data & Logic
 
-### Step 2.1: Firestore Collections
-- [ ] Create `teams` collection in Firestore
-- [ ] Create `sprints` collection (with teamId field for querying)
-- [ ] Set up Firestore security rules (allow read/write for MVP — see Known Limitations)
-- [ ] Test read/write from Firebase console
-- [ ] Commit: "feat: set up Firestore collections"
+### Step 2.1: Firestore Collections ✓
+- [x] Create `teams` collection in Firestore
+- [x] Create `sprints` collection (with teamId field for querying)
+- [x] Set up Firestore security rules (allow read/write for MVP — see Known Limitations)
+- [x] Test read/write from Firebase console
+- [x] Commit: "feat: set up Firestore collections"
 
 ### Step 2.2: Team Store (Pinia + VueFire)
 - [ ] Create `src/stores/teamStore.ts`
