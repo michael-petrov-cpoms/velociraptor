@@ -170,13 +170,13 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Test read/write from Firebase console
 - [x] Commit: "feat: set up Firestore collections"
 
-### Step 2.2: Team Store (Pinia + VueFire)
-- [ ] Create `src/stores/teamStore.ts`
-- [ ] Use VueFire's `useCollection` for reactive Firestore binding
-- [ ] Implement: addTeam, updateTeam, deleteTeam, getTeamById
-- [ ] On deleteTeam: also delete all sprints with matching teamId (client-side cascade)
-- [ ] Write unit tests for store actions (mock Firestore)
-- [ ] Commit: "feat: add team store with Firestore"
+### Step 2.2: Team Store (Pinia + VueFire) ✓
+- [x] Create `src/stores/teamStore.ts`
+- [x] Use VueFire's `useCollection` for reactive Firestore binding
+- [x] Implement: addTeam, updateTeam, deleteTeam, getTeamById
+- [x] On deleteTeam: also delete all sprints with matching teamId (client-side cascade)
+- [x] Write unit tests for store actions (mock Firestore)
+- [x] Commit: "feat: add team store with Firestore"
 
 ### Step 2.3: Sprint Store (Pinia + VueFire)
 - [ ] Create `src/stores/sprintStore.ts`
