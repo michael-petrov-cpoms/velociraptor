@@ -185,13 +185,13 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Write unit tests
 - [x] Commit: "feat: add sprint store with Firestore"
 
-### Step 2.4: Velocity Calculator
-- [ ] Create `src/composables/useVelocityCalculator.ts`
-- [ ] Implement normalised velocity calculation using the formula above
-- [ ] Take last 5 sprints by `endDate` descending
-- [ ] For baseline: convert `baselineVelocity / sprintLengthDays` to get velocity per day
-- [ ] Handle edge case: no sprints and no baseline (return null/prompt user)
-- [ ] Write unit tests for calculation edge cases:
+### Step 2.4: Velocity Calculator ✓
+- [x] Create `src/composables/useVelocityCalculator.ts`
+- [x] Implement normalised velocity calculation using the formula above
+- [x] Take last 5 sprints by `endDate` descending
+- [x] For baseline: convert `baselineVelocity / sprintLengthDays` to get velocity per day
+- [x] Handle edge case: no sprints and no baseline (return null/prompt user)
+- [x] Write unit tests for calculation edge cases:
   - Team with 0 sprints, no baseline → returns null
   - Team with 0 sprints, with baseline → uses baseline only
   - Team with 1 sprint, with baseline → blends (baseline + sprint) / 2
@@ -200,7 +200,7 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
   - Team with 1-4 sprints, no baseline → averages available sprints only
   - Sprint with high leave days (near limit)
   - Sprint with 0 points → included in average (drags it down)
-- [ ] Commit: "feat: add velocity calculation composable"
+- [x] Commit: "feat: add velocity calculation composable"
 
 ---
 
