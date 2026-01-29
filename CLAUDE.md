@@ -225,7 +225,7 @@ When the user asks to commit, perform ALL of the following steps:
 - **Do NOT include any AI co-author or mention of Claude**
 
 ### 3. Create PR Description
-- Create `prompts/pr/pr-{branch-name}.md`
+- Create `prompts/pr/pr_{step}_{feature}.md` (e.g., `pr_2.3_sprint-store.md`)
 - Include:
   - Summary of what was done
   - Files added/modified
@@ -234,8 +234,8 @@ When the user asks to commit, perform ALL of the following steps:
   - Reference to implementation.md step
 
 ### 4. Create Next Session Prompt
-- Create `prompts/initial_prompt_{next-step}.md`
-- Follow the pattern from `prompts/initial_prompt_1.5.md`:
+- Create `prompts/initial_prompt_{next_step}_{next_feature}.md` (e.g., `initial_prompt_2.4_velocity-calculator.md`)
+- Follow this pattern:
   ```
   Read '/path/to/velociraptor-product-overview.md' and '/path/to/implementation.md'.
   Let's make a plan for step {X.Y} of the implementation and do it.
