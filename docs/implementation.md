@@ -178,12 +178,12 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Write unit tests for store actions (mock Firestore)
 - [x] Commit: "feat: add team store with Firestore"
 
-### Step 2.3: Sprint Store (Pinia + VueFire)
-- [ ] Create `src/stores/sprintStore.ts`
-- [ ] Implement: addSprint, updateSprint, deleteSprint, getSprintsForTeam
-- [ ] Query sprints by teamId, order by `endDate` descending
-- [ ] Write unit tests
-- [ ] Commit: "feat: add sprint store with Firestore"
+### Step 2.3: Sprint Store (Pinia + VueFire) ✓
+- [x] Create `src/stores/sprintStore.ts`
+- [x] Implement: addSprint, updateSprint, deleteSprint, getSprintsForTeam
+- [x] Query sprints by teamId, order by `endDate` descending
+- [x] Write unit tests
+- [x] Commit: "feat: add sprint store with Firestore"
 
 ### Step 2.4: Velocity Calculator
 - [ ] Create `src/composables/useVelocityCalculator.ts`
