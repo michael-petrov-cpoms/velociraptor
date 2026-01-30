@@ -206,17 +206,17 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 
 ## Phase 3: UI Screens
 
-### Step 3.1: Home / Team List
-- [ ] Create `src/views/HomeView.vue`
-- [ ] Display list of teams using FeatherUI layout components
-- [ ] Show quick stats per team:
+### Step 3.1: Home / Team List ✓
+- [x] Create `src/views/HomeView.vue`
+- [x] Display list of teams using FeatherUI layout components
+- [x] Show quick stats per team:
   - Sprint count (number of logged sprints)
   - Last velocity (most recent sprint's raw `pointsCompleted`, or "No sprints" if none)
-- [ ] Add "Create Team" button (opens modal)
-- [ ] Handle loading state while fetching from Firestore
-- [ ] Handle empty state (no teams yet)
-- [ ] Write component tests
-- [ ] Commit: "feat: implement team list home screen"
+- [x] Add "Create Team" button (opens modal)
+- [x] Handle loading state while fetching from Firestore
+- [x] Handle empty state (no teams yet)
+- [x] Write component tests
+- [x] Commit: "feat: implement team list home screen"
 
 ### Step 3.2: Create Team Modal
 - [ ] Create `src/components/CreateTeamModal.vue`
