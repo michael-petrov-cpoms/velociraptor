@@ -18,15 +18,19 @@ const showCreateModal = ref(false)
 /**
  * Teams enriched with computed stats.
  * This avoids calling getSprintsForTeam multiple times per card in the template.
+ *
+ * Note: VueFire adds `id` as a non-enumerable property, so we must explicitly
+ * copy it when spreading the team object. Otherwise, `id` would be lost.
  */
 const teamsWithStats = computed(() =>
   teams.value.map((team) => {
     const sprints = sprintStore.getSprintsForTeam(team.id)
     return {
       ...team,
+      id: team.id, // Explicitly copy non-enumerable id from VueFire
       stats: {
         sprintCount: sprints.length,
-        lastVelocity: sprints.length > 0 ? sprints[0].pointsCompleted : null,
+        lastVelocity: sprints[0]?.pointsCompleted ?? null,
       },
     }
   }),

@@ -228,17 +228,17 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Write component tests (42 tests covering rendering, validation, submission, close behavior, accessibility)
 - [x] Commit: "feat: add create team modal"
 
-### Step 3.3: Team Detail View
-- [ ] Create `src/views/TeamDetailView.vue`
-- [ ] Display team info (name, members, developers, sprint length)
-- [ ] Display sprint history table, sorted by endDate descending
-- [ ] Show note if sprint's developerCount differs from current team config
-- [ ] Add edit team / delete team buttons (edit opens modal)
-- [ ] Add edit/delete buttons for each sprint in history (edit opens modal)
-- [ ] Navigation to Log Sprint and Plan Sprint
-- [ ] Handle loading state
-- [ ] Write component tests
-- [ ] Commit: "feat: implement team detail view"
+### Step 3.3: Team Detail View ✓
+- [x] Create `src/views/TeamDetailView.vue`
+- [x] Display team info (name, members, developers, sprint length)
+- [x] Display sprint history table, sorted by endDate descending
+- [x] Show note if sprint's developerCount differs from current team config
+- [x] Add edit team / delete team buttons (edit opens modal)
+- [x] Add edit/delete buttons for each sprint in history (edit opens modal)
+- [x] Navigation to Log Sprint and Plan Sprint
+- [x] Handle loading state
+- [x] Write component tests
+- [x] Commit: "feat: implement team detail view"
 
 ### Step 3.4: Edit Team Modal
 - [ ] Create `src/components/EditTeamModal.vue`
