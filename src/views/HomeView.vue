@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useTeamStore } from '@/stores/teamStore'
 import { useSprintStore } from '@/stores/sprintStore'
+import CreateTeamModal from '@/components/CreateTeamModal.vue'
 
 const teamStore = useTeamStore()
 const sprintStore = useSprintStore()
@@ -77,8 +78,8 @@ const teamsWithStats = computed(() =>
       </RouterLink>
     </div>
 
-    <!-- TODO: CreateTeamModal will be added in Step 3.2 -->
-    <!-- <CreateTeamModal v-if="showCreateModal" @close="showCreateModal = false" /> -->
+    <!-- Create Team Modal -->
+    <CreateTeamModal v-if="showCreateModal" @close="showCreateModal = false" />
   </div>
 </template>
 

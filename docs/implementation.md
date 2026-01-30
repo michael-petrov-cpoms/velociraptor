@@ -218,15 +218,15 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Write component tests
 - [x] Commit: "feat: implement team list home screen"
 
-### Step 3.2: Create Team Modal
-- [ ] Create `src/components/CreateTeamModal.vue`
-- [ ] Form fields: name, memberCount, developerCount, sprintLengthDays, baselineVelocity (optional)
-- [ ] Label baselineVelocity as "Expected points per sprint" for clarity
-- [ ] Use FeatherUI form components (`<f-form>`, `<form-input>`, `<f-button>`)
-- [ ] Implement validation per rules above
-- [ ] Display validation errors with FeatherUI styling
-- [ ] Write component tests
-- [ ] Commit: "feat: add create team modal"
+### Step 3.2: Create Team Modal ✓
+- [x] Create `src/components/CreateTeamModal.vue`
+- [x] Form fields: name, memberCount, developerCount, sprintLengthDays, baselineVelocity (optional)
+- [x] Label baselineVelocity as "Expected points per sprint" for clarity
+- [x] Use FeatherUI `<f-button>` with custom styled form inputs (native inputs with FeatherUI CSS variables)
+- [x] Implement validation per rules above (on submit only, with cross-field validation)
+- [x] Display validation errors with FeatherUI styling
+- [x] Write component tests (42 tests covering rendering, validation, submission, close behavior, accessibility)
+- [x] Commit: "feat: add create team modal"
 
 ### Step 3.3: Team Detail View
 - [ ] Create `src/views/TeamDetailView.vue`
