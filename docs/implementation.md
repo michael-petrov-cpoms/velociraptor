@@ -240,12 +240,12 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Write component tests
 - [x] Commit: "feat: implement team detail view"
 
-### Step 3.4: Edit Team Modal
-- [ ] Create `src/components/EditTeamModal.vue`
-- [ ] Pre-fill form with existing team data
-- [ ] Same validation as create form
-- [ ] Write component tests
-- [ ] Commit: "feat: add edit team modal"
+### Step 3.4: Edit Team Modal ✓
+- [x] Create `src/components/EditTeamModal.vue`
+- [x] Pre-fill form with existing team data
+- [x] Same validation as create form
+- [x] Write component tests
+- [x] Commit: "feat: add edit team modal"
 
 ### Step 3.5: Log Sprint Form
 - [ ] Create `src/views/LogSprintView.vue`

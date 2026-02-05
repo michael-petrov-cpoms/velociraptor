@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useTeamStore } from '@/stores/teamStore'
 import { useSprintStore } from '@/stores/sprintStore'
+import EditTeamModal from '@/components/EditTeamModal.vue'
 import type { Sprint } from '@/types'
 import type { Timestamp } from 'firebase/firestore'
 
@@ -50,12 +51,13 @@ function hasDeveloperMismatch(sprint: Sprint): boolean {
 // Team Actions
 // ─────────────────────────────────────────────────────────────────────────────
 
+const showEditModal = ref(false)
+
 /**
  * Opens the edit team modal.
- * Note: Modal will be implemented in Step 3.4
  */
 function handleEditTeam(): void {
-  alert('Edit team feature coming soon!')
+  showEditModal.value = true
 }
 
 /**
@@ -66,7 +68,8 @@ async function handleDeleteTeam(): Promise<void> {
   if (!team.value) return
 
   const sprintCount = sprints.value.length
-  const sprintWarning = sprintCount > 0 ? ` This will also delete all ${sprintCount} sprint(s).` : ''
+  const sprintWarning =
+    sprintCount > 0 ? ` This will also delete all ${sprintCount} sprint(s).` : ''
 
   const confirmed = confirm(
     `Are you sure you want to delete "${team.value.name}"?${sprintWarning} This action cannot be undone.`,
@@ -96,7 +99,9 @@ function handleEditSprint(sprintId: string): void {
  * Deletes a sprint after user confirmation.
  */
 async function handleDeleteSprint(sprintId: string): Promise<void> {
-  const confirmed = confirm('Are you sure you want to delete this sprint? This action cannot be undone.')
+  const confirmed = confirm(
+    'Are you sure you want to delete this sprint? This action cannot be undone.',
+  )
 
   if (confirmed) {
     await sprintStore.deleteSprint(sprintId)
@@ -125,9 +130,7 @@ async function handleDeleteSprint(sprintId: string): Promise<void> {
       <!-- Header Section -->
       <header class="team-header">
         <div class="header-left">
-          <RouterLink to="/" class="back-link">
-            ← Back to Teams
-          </RouterLink>
+          <RouterLink to="/" class="back-link"> ← Back to Teams </RouterLink>
           <h1>{{ team.name }}</h1>
         </div>
         <div class="header-actions">
@@ -218,6 +221,9 @@ async function handleDeleteSprint(sprintId: string): Promise<void> {
         </table>
       </section>
     </div>
+
+    <!-- Edit Team Modal -->
+    <EditTeamModal v-if="showEditModal && team" :team="team" @close="showEditModal = false" />
   </div>
 </template>
 

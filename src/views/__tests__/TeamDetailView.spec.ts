@@ -85,11 +85,15 @@ const router = createRouter({
     { path: '/', name: 'home', component: { template: '<div>Home</div>' } },
     { path: '/team/:id', name: 'team-detail', component: TeamDetailView },
     { path: '/team/:id/log', name: 'log-sprint', component: { template: '<div>Log Sprint</div>' } },
-    { path: '/team/:id/plan', name: 'plan-sprint', component: { template: '<div>Plan Sprint</div>' } },
+    {
+      path: '/team/:id/plan',
+      name: 'plan-sprint',
+      component: { template: '<div>Plan Sprint</div>' },
+    },
   ],
 })
 
-// Stub FeatherUI components
+// Stub FeatherUI components and child modals
 const globalStubs = {
   'f-button': {
     template: '<button :disabled="disabled" @click="$emit(\'click\')">{{ text }}</button>',
@@ -98,6 +102,12 @@ const globalStubs = {
   },
   'f-loading-spinner': {
     template: '<div data-testid="loading-spinner">Loading...</div>',
+  },
+  EditTeamModal: {
+    template:
+      '<div data-testid="edit-team-modal"><button class="mock-close-btn" @click="$emit(\'close\')">Close</button></div>',
+    props: ['team'],
+    emits: ['close'],
   },
 }
 
@@ -122,7 +132,9 @@ function createMockTeam(overrides: Partial<MockTeam> = {}): MockTeam {
 /**
  * Creates a mock sprint with a real Date object wrapped in a Firestore-like toDate() method.
  */
-function createMockSprint(overrides: Partial<Omit<MockSprint, 'endDate'>> & { endDate?: Date } = {}): MockSprint {
+function createMockSprint(
+  overrides: Partial<Omit<MockSprint, 'endDate'>> & { endDate?: Date } = {},
+): MockSprint {
   const { endDate, ...rest } = overrides
   return {
     id: 'sprint-1',
@@ -331,14 +343,45 @@ describe('TeamDetailView', () => {
       expect(editButton?.exists()).toBe(true)
     })
 
-    it('Edit Team button shows alert when clicked', async () => {
+    it('Edit Team button opens edit modal when clicked', async () => {
+      await mountComponent()
+
+      // Modal should not be visible initially
+      expect(wrapper.find('[data-testid="edit-team-modal"]').exists()).toBe(false)
+
+      const buttons = wrapper.findAll('button')
+      const editButton = buttons.find((b) => b.text().includes('Edit Team'))
+      await editButton?.trigger('click')
+
+      expect(wrapper.find('[data-testid="edit-team-modal"]').exists()).toBe(true)
+    })
+
+    it('Edit Team modal receives team data', async () => {
       await mountComponent()
 
       const buttons = wrapper.findAll('button')
       const editButton = buttons.find((b) => b.text().includes('Edit Team'))
       await editButton?.trigger('click')
 
-      expect(alertSpy).toHaveBeenCalledWith('Edit team feature coming soon!')
+      // Verify modal is rendered (stub has data-testid)
+      const modal = wrapper.find('[data-testid="edit-team-modal"]')
+      expect(modal.exists()).toBe(true)
+    })
+
+    it('Edit Team modal closes when close event emitted', async () => {
+      await mountComponent()
+
+      // Open the modal
+      const buttons = wrapper.findAll('button')
+      const editButton = buttons.find((b) => b.text().includes('Edit Team'))
+      await editButton?.trigger('click')
+      expect(wrapper.find('[data-testid="edit-team-modal"]').exists()).toBe(true)
+
+      // Click the mock close button to emit 'close'
+      await wrapper.find('.mock-close-btn').trigger('click')
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.find('[data-testid="edit-team-modal"]').exists()).toBe(false)
     })
 
     it('renders "Delete Team" button', async () => {
@@ -357,7 +400,9 @@ describe('TeamDetailView', () => {
       await deleteButton?.trigger('click')
 
       expect(confirmSpy).toHaveBeenCalled()
-      expect(confirmSpy.mock.calls[0]?.[0]).toContain('Are you sure you want to delete "Alpha Team"?')
+      expect(confirmSpy.mock.calls[0]?.[0]).toContain(
+        'Are you sure you want to delete "Alpha Team"?',
+      )
     })
 
     it('confirming deletion calls teamStore.deleteTeam', async () => {
@@ -661,7 +706,9 @@ describe('TeamDetailView', () => {
       await deleteButton.trigger('click')
 
       expect(confirmSpy).toHaveBeenCalled()
-      expect(confirmSpy.mock.calls[0]?.[0]).toContain('Are you sure you want to delete this sprint?')
+      expect(confirmSpy.mock.calls[0]?.[0]).toContain(
+        'Are you sure you want to delete this sprint?',
+      )
     })
 
     it('confirming sprint deletion calls sprintStore.deleteSprint with correct ID', async () => {
