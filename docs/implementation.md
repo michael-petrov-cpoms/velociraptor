@@ -247,16 +247,16 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Write component tests
 - [x] Commit: "feat: add edit team modal"
 
-### Step 3.5: Log Sprint Form
-- [ ] Create `src/views/LogSprintView.vue`
-- [ ] Form: endDate (native date input), pointsCompleted, leaveDays
-- [ ] Allow 0.5 increments for leaveDays (half-days)
-- [ ] Auto-populate sprintLengthDays and developerCount from team
-- [ ] Validate availableDays ≥ 1
-- [ ] Show confirmation warning if pointsCompleted is 0
-- [ ] Save sprint and redirect to team detail
-- [ ] Write component tests
-- [ ] Commit: "feat: add log sprint form"
+### Step 3.5: Log Sprint Form ✓
+- [x] Create `src/views/LogSprintView.vue`
+- [x] Form: endDate (native date input), pointsCompleted, leaveDays
+- [x] Allow 0.5 increments for leaveDays (half-days)
+- [x] Auto-populate sprintLengthDays and developerCount from team
+- [x] Validate availableDays ≥ 1
+- [x] Show confirmation warning if pointsCompleted is 0
+- [x] Save sprint and redirect to team detail
+- [x] Write component tests
+- [x] Commit: "feat: add log sprint form"
 
 ### Step 3.6: Edit Sprint Modal
 - [ ] Create `src/components/EditSprintModal.vue`
