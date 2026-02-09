@@ -258,14 +258,14 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Write component tests
 - [x] Commit: "feat: add log sprint form"
 
-### Step 3.6: Edit Sprint Modal
-- [ ] Create `src/components/EditSprintModal.vue`
-- [ ] Pre-fill with existing sprint data
-- [ ] Editable fields: `endDate`, `pointsCompleted`, `leaveDays`
-- [ ] Read-only fields: `sprintLengthDays`, `developerCount` (snapshots preserved from original logging)
-- [ ] Same validation as log sprint
-- [ ] Write component tests
-- [ ] Commit: "feat: add edit sprint modal"
+### Step 3.6: Edit Sprint Modal ✓
+- [x] Create `src/components/EditSprintModal.vue`
+- [x] Pre-fill with existing sprint data
+- [x] Editable fields: `endDate`, `pointsCompleted`, `leaveDays`
+- [x] Read-only fields: `sprintLengthDays`, `developerCount` (snapshots preserved from original logging)
+- [x] Same validation as log sprint
+- [x] Write component tests
+- [x] Commit: "feat: add edit sprint modal"
 
 ### Step 3.7: Plan Sprint Calculator
 - [ ] Create `src/views/PlanSprintView.vue`

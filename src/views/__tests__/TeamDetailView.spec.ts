@@ -57,6 +57,7 @@ vi.mock('@/stores/sprintStore', () => ({
       return mockSprintsLoading.value
     },
     getSprintsForTeam: () => mockSprints.value,
+    getSprintById: (id: string) => mockSprints.value.find((s) => s.id === id),
     deleteSprint: mockDeleteSprint,
   }),
 }))
@@ -107,6 +108,12 @@ const globalStubs = {
     template:
       '<div data-testid="edit-team-modal"><button class="mock-close-btn" @click="$emit(\'close\')">Close</button></div>',
     props: ['team'],
+    emits: ['close'],
+  },
+  EditSprintModal: {
+    template:
+      '<div data-testid="edit-sprint-modal"><button class="mock-close-btn" @click="$emit(\'close\')">Close</button></div>',
+    props: ['sprint'],
     emits: ['close'],
   },
 }
@@ -690,13 +697,15 @@ describe('TeamDetailView', () => {
       expect(deleteButton.text()).toBe('Delete')
     })
 
-    it('Edit Sprint button shows alert when clicked', async () => {
+    it('Edit Sprint button opens edit sprint modal when clicked', async () => {
       await mountComponent()
+
+      expect(wrapper.find('[data-testid="edit-sprint-modal"]').exists()).toBe(false)
 
       const editButton = wrapper.find('.edit-btn')
       await editButton.trigger('click')
 
-      expect(alertSpy).toHaveBeenCalledWith('Edit sprint feature coming soon!')
+      expect(wrapper.find('[data-testid="edit-sprint-modal"]').exists()).toBe(true)
     })
 
     it('Delete Sprint button shows confirmation dialog', async () => {
