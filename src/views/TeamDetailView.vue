@@ -4,6 +4,7 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useTeamStore } from '@/stores/teamStore'
 import { useSprintStore } from '@/stores/sprintStore'
 import EditTeamModal from '@/components/EditTeamModal.vue'
+import EditSprintModal from '@/components/EditSprintModal.vue'
 import type { Sprint } from '@/types'
 import type { Timestamp } from 'firebase/firestore'
 
@@ -52,6 +53,8 @@ function hasDeveloperMismatch(sprint: Sprint): boolean {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const showEditModal = ref(false)
+const showEditSprintModal = ref(false)
+const editingSprint = ref<Sprint | null>(null)
 
 /**
  * Opens the edit team modal.
@@ -86,13 +89,11 @@ async function handleDeleteTeam(): Promise<void> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Opens the edit sprint modal.
- * Note: Modal will be implemented in Step 3.6
+ * Opens the edit sprint modal for the given sprint.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handleEditSprint(sprintId: string): void {
-  // sprintId will be used when EditSprintModal is implemented (Step 3.6)
-  alert('Edit sprint feature coming soon!')
+  editingSprint.value = sprintStore.getSprintById(sprintId) ?? null
+  showEditSprintModal.value = true
 }
 
 /**
@@ -224,6 +225,13 @@ async function handleDeleteSprint(sprintId: string): Promise<void> {
 
     <!-- Edit Team Modal -->
     <EditTeamModal v-if="showEditModal && team" :team="team" @close="showEditModal = false" />
+
+    <!-- Edit Sprint Modal -->
+    <EditSprintModal
+      v-if="showEditSprintModal && editingSprint"
+      :sprint="editingSprint"
+      @close="showEditSprintModal = false; editingSprint = null"
+    />
   </div>
 </template>
 
