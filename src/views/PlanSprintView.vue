@@ -229,12 +229,17 @@ function onInput() {
             <span
               class="hero-label has-tooltip"
               data-tooltip="Calculated as: average velocity per day × available working days. Rounded down for a conservative estimate."
-            >Recommended Points</span>
+              >Recommended Points</span
+            >
           </div>
 
           <div class="capacity-section">
             <div class="capacity-header">
-              <span class="has-tooltip" data-tooltip="Percentage of available working days vs total sprint days. 100% means no leave.">Capacity</span>
+              <span
+                class="has-tooltip"
+                data-tooltip="Percentage of available working days vs total sprint days. 100% means no leave."
+                >Capacity</span
+              >
               <span>{{ capacityText }}</span>
             </div>
             <div class="capacity-bar-track">
@@ -251,7 +256,12 @@ function onInput() {
           </div>
 
           <div class="data-source">
-            <p class="has-tooltip" data-tooltip="Shows which data points were used: recent sprints, baseline estimate, or both.">{{ dataSourceDescription }}</p>
+            <p
+              class="has-tooltip"
+              data-tooltip="Shows which data points were used: recent sprints, baseline estimate, or both."
+            >
+              {{ dataSourceDescription }}
+            </p>
           </div>
         </div>
 
@@ -359,7 +369,9 @@ function onInput() {
   border: 1px solid var(--f-border-color, #e0e0e0);
   border-radius: 9999px;
   background: var(--f-background-primary, #fff);
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .back-link:hover {

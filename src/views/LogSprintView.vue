@@ -372,7 +372,9 @@ async function handleSubmit() {
   border: 1px solid var(--f-border-color, #e0e0e0);
   border-radius: 9999px;
   background: var(--f-background-primary, #fff);
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .back-link:hover {

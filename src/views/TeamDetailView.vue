@@ -219,7 +219,8 @@ function handleDeleteSprint(sprintId: string): void {
             <span
               class="info-label has-tooltip"
               data-tooltip="Your team's expected points per sprint. Used as a data point in velocity averaging when fewer than 5 sprints are logged."
-            >Baseline Velocity</span>
+              >Baseline Velocity</span
+            >
             <span class="info-value">{{ team.baselineVelocity }} pts/sprint</span>
           </div>
         </div>
@@ -251,7 +252,13 @@ function handleDeleteSprint(sprintId: string): void {
             <tr>
               <th scope="col">End Date</th>
               <th scope="col" class="text-right">Points</th>
-              <th scope="col" class="text-right has-tooltip" data-tooltip="Total person-days of leave across all developers for this sprint.">Leave Days</th>
+              <th
+                scope="col"
+                class="text-right has-tooltip"
+                data-tooltip="Total person-days of leave across all developers for this sprint."
+              >
+                Leave Days
+              </th>
               <th scope="col" class="text-right">Developers</th>
               <th scope="col" class="text-right">Actions</th>
             </tr>
@@ -374,7 +381,9 @@ function handleDeleteSprint(sprintId: string): void {
   border: 1px solid var(--f-border-color, #e0e0e0);
   border-radius: 9999px;
   background: var(--f-background-primary, #fff);
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .back-link:hover {
@@ -603,7 +612,9 @@ function handleDeleteSprint(sprintId: string): void {
   border: 1px solid var(--f-error-color, #dc2626);
   border-radius: 9999px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .btn-delete-team:hover {
