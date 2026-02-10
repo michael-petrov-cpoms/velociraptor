@@ -292,7 +292,16 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Handle network errors gracefully
 - [x] Commit: "feat: add error handling and confirmation dialogs"
 
-### Step 4.2: Final Testing
+### Step 4.2: UI Polish & Tooltips ✓
+- [x] Style "Back to Teams" link as a proper styled link (not bare text)
+- [x] Style "Delete Team" button with danger/destructive appearance
+- [x] Increase sprint history Edit/Delete button size (larger padding + font)
+- [x] Add tooltip to "Baseline Velocity" in Team Configuration card
+- [x] Add tooltip to "Recommended Points" in Plan Sprint results
+- [x] Add tooltips to other key metrics (Capacity %, Data Source, Leave Days)
+- [x] Commit: "feat: polish UI buttons and add explanatory tooltips"
+
+### Step 4.3: Final Testing
 - [ ] Run full test suite, fix any failures
 - [ ] Manual end-to-end testing of all flows:
   - Create team → Log sprints → Plan sprint
@@ -304,7 +313,7 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [ ] Fix any bugs found
 - [ ] Commit: "test: ensure all tests pass"
 
-### Step 4.3: Firebase Hosting Deployment
+### Step 4.4: Firebase Hosting Deployment
 - [ ] Install firebase-tools globally
 - [ ] Run `firebase login` and `firebase init hosting`
 - [ ] Configure dist directory and SPA rewrite

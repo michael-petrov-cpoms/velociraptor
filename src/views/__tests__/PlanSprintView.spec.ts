@@ -567,6 +567,36 @@ describe('PlanSprintView', () => {
       })
     })
 
+    it('Recommended Points label has explanatory tooltip', async () => {
+      mockCalculatePlan.mockReturnValue({ ...defaultPlanResult })
+
+      await mountComponent()
+      await setLeaveDays(3)
+
+      const heroLabel = wrapper.find('.hero-label')
+      expect(heroLabel.attributes('data-tooltip')).toContain('average velocity per day')
+    })
+
+    it('Capacity label has explanatory tooltip', async () => {
+      mockCalculatePlan.mockReturnValue({ ...defaultPlanResult })
+
+      await mountComponent()
+      await setLeaveDays(3)
+
+      const capacityTooltip = wrapper.find('.capacity-header .has-tooltip')
+      expect(capacityTooltip.attributes('data-tooltip')).toContain('available working days')
+    })
+
+    it('Data source has explanatory tooltip', async () => {
+      mockCalculatePlan.mockReturnValue({ ...defaultPlanResult })
+
+      await mountComponent()
+      await setLeaveDays(3)
+
+      const dataSourceTooltip = wrapper.find('.data-source .has-tooltip')
+      expect(dataSourceTooltip.attributes('data-tooltip')).toContain('data points were used')
+    })
+
     it('has proper heading hierarchy', async () => {
       await mountComponent()
 

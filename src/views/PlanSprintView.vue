@@ -162,7 +162,7 @@ function onInput() {
       <!-- Header -->
       <header class="page-header">
         <RouterLink :to="`/team/${teamId}`" class="back-link">
-          &larr; Back to {{ team.name }}
+          &larr; Back to Team {{ team.name }}
         </RouterLink>
         <h1>Plan Sprint</h1>
       </header>
@@ -226,12 +226,15 @@ function onInput() {
         <div v-if="planResult" class="results-card">
           <div class="recommendation-hero">
             <span class="hero-number">{{ planResult.recommendedPoints }}</span>
-            <span class="hero-label">Recommended Points</span>
+            <span
+              class="hero-label has-tooltip"
+              data-tooltip="Calculated as: average velocity per day × available working days. Rounded down for a conservative estimate."
+            >Recommended Points</span>
           </div>
 
           <div class="capacity-section">
             <div class="capacity-header">
-              <span>Capacity</span>
+              <span class="has-tooltip" data-tooltip="Percentage of available working days vs total sprint days. 100% means no leave.">Capacity</span>
               <span>{{ capacityText }}</span>
             </div>
             <div class="capacity-bar-track">
@@ -248,7 +251,7 @@ function onInput() {
           </div>
 
           <div class="data-source">
-            <p>{{ dataSourceDescription }}</p>
+            <p class="has-tooltip" data-tooltip="Shows which data points were used: recent sprints, baseline estimate, or both.">{{ dataSourceDescription }}</p>
           </div>
         </div>
 
@@ -344,13 +347,25 @@ function onInput() {
 }
 
 .back-link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.25rem;
   font-size: 0.875rem;
-  color: var(--f-primary, #0066cc);
+  font-weight: 500;
+  color: var(--f-text-primary, #333);
   text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--f-border-color, #e0e0e0);
+  border-radius: 9999px;
+  background: var(--f-background-primary, #fff);
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+  background: var(--f-background-secondary, #f5f5f5);
+  border-color: var(--f-text-secondary, #666);
+  text-decoration: none;
 }
 
 .page-header h1 {
@@ -584,5 +599,40 @@ function onInput() {
   margin: 0;
   color: var(--f-text-secondary, #666);
   font-size: 0.9375rem;
+}
+
+/* Tooltip Styling */
+.has-tooltip {
+  cursor: help;
+  border-bottom: 1px dotted currentColor;
+  position: relative;
+}
+
+.has-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  background: var(--f-text-primary, #333);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: normal;
+  width: max-content;
+  max-width: 260px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease;
+  z-index: 100;
+}
+
+.has-tooltip:hover::after {
+  opacity: 1;
 }
 </style>
