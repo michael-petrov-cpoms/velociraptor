@@ -36,7 +36,7 @@ jobs:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 
