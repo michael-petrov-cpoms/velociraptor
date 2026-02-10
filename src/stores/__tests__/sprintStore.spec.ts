@@ -264,13 +264,10 @@ describe('sprintStore', () => {
         leaveDays: 3,
       })
 
-      expect(updateDoc).toHaveBeenCalledWith(
-        expect.anything(),
-        {
-          pointsCompleted: 38,
-          leaveDays: 3,
-        },
-      )
+      expect(updateDoc).toHaveBeenCalledWith(expect.anything(), {
+        pointsCompleted: 38,
+        leaveDays: 3,
+      })
     })
 
     it('should create correct document reference', async () => {
@@ -297,9 +294,7 @@ describe('sprintStore', () => {
       await store.deleteSprint('sprint-1')
 
       expect(deleteDoc).toHaveBeenCalledTimes(1)
-      expect(deleteDoc).toHaveBeenCalledWith(
-        expect.objectContaining({ id: 'sprint-1' }),
-      )
+      expect(deleteDoc).toHaveBeenCalledWith(expect.objectContaining({ id: 'sprint-1' }))
     })
 
     it('should create correct document reference for deletion', async () => {

@@ -210,8 +210,8 @@ describe('HomeView', () => {
       await mountComponent()
 
       const cards = wrapper.findAll('.team-card')
-      expect(cards[0].text()).toContain('Alpha Team')
-      expect(cards[1].text()).toContain('Beta Team')
+      expect(cards[0]!.text()).toContain('Alpha Team')
+      expect(cards[1]!.text()).toContain('Beta Team')
     })
 
     it('links team cards to team detail page', async () => {
@@ -220,8 +220,8 @@ describe('HomeView', () => {
       await mountComponent()
 
       const cards = wrapper.findAll('.team-card')
-      expect(cards[0].attributes('href')).toBe('/team/team-1')
-      expect(cards[1].attributes('href')).toBe('/team/team-2')
+      expect(cards[0]!.attributes('href')).toBe('/team/team-1')
+      expect(cards[1]!.attributes('href')).toBe('/team/team-2')
     })
 
     it('does not show empty state or loading when teams exist', async () => {
@@ -239,8 +239,8 @@ describe('HomeView', () => {
       await mountComponent()
 
       const cards = wrapper.findAll('.team-card')
-      expect(cards[0].text()).toContain('4 developers')
-      expect(cards[1].text()).toContain('3 developers')
+      expect(cards[0]!.text()).toContain('4 developers')
+      expect(cards[1]!.text()).toContain('3 developers')
     })
   })
 

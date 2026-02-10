@@ -221,14 +221,11 @@ describe('teamStore', () => {
         developerCount: 8,
       })
 
-      expect(updateDoc).toHaveBeenCalledWith(
-        expect.anything(),
-        {
-          name: 'Renamed Team',
-          memberCount: 10,
-          developerCount: 8,
-        },
-      )
+      expect(updateDoc).toHaveBeenCalledWith(expect.anything(), {
+        name: 'Renamed Team',
+        memberCount: 10,
+        developerCount: 8,
+      })
     })
 
     it('should create correct document reference', async () => {

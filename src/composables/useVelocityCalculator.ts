@@ -268,9 +268,7 @@ export function useVelocityCalculator(
       return 'No velocity data available'
     }
 
-    const sprintCount = result.includesBaseline
-      ? result.dataPointCount - 1
-      : result.dataPointCount
+    const sprintCount = result.includesBaseline ? result.dataPointCount - 1 : result.dataPointCount
 
     if (sprintCount === 0 && result.includesBaseline) {
       return 'Based on baseline estimate'

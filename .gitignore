@@ -40,5 +40,8 @@ __screenshots__/
 # Local prompts
 prompts/
 
+# Yarn (project uses npm)
+yarn.lock
+
 # OMC (oh-my-claudecode) local state
 .omc/

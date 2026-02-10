@@ -82,7 +82,8 @@ const confirmDialogTitle = computed(() => {
 const confirmDialogMessage = computed(() => {
   if (confirmAction.value === 'delete-team') {
     const sprintCount = sprints.value.length
-    const sprintWarning = sprintCount > 0 ? ` This will also delete all ${sprintCount} sprint(s).` : ''
+    const sprintWarning =
+      sprintCount > 0 ? ` This will also delete all ${sprintCount} sprint(s).` : ''
     return `Are you sure you want to delete "${team.value?.name}"?${sprintWarning} This action cannot be undone.`
   }
   if (confirmAction.value === 'delete-sprint') {
@@ -138,6 +139,11 @@ function handleCancelAction(): void {
 function handleEditSprint(sprintId: string): void {
   editingSprint.value = sprintStore.getSprintById(sprintId) ?? null
   showEditSprintModal.value = true
+}
+
+function handleCloseEditSprint(): void {
+  showEditSprintModal.value = false
+  editingSprint.value = null
 }
 
 /**
@@ -283,7 +289,7 @@ function handleDeleteSprint(sprintId: string): void {
     <EditSprintModal
       v-if="showEditSprintModal && editingSprint"
       :sprint="editingSprint"
-      @close="showEditSprintModal = false; editingSprint = null"
+      @close="handleCloseEditSprint"
     />
 
     <!-- Confirmation Dialog -->
