@@ -285,12 +285,12 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 
 ## Phase 4: Polish & Deploy
 
-### Step 4.1: Error Handling & Loading States
-- [ ] Add loading spinners (`<f-loading-spinner>` from FeatherUI)
-- [ ] Add error messages for failed Firestore operations
-- [ ] Add confirmation dialogs for delete actions (team and sprint)
-- [ ] Handle network errors gracefully
-- [ ] Commit: "feat: add loading and error states"
+### Step 4.1: Error Handling & Loading States ✓
+- [x] Add loading spinners (`<f-loading-spinner>` from FeatherUI)
+- [x] Add error messages for failed Firestore operations
+- [x] Add confirmation dialogs for delete actions (team and sprint)
+- [x] Handle network errors gracefully
+- [x] Commit: "feat: add error handling and confirmation dialogs"
 
 ### Step 4.2: Final Testing
 - [ ] Run full test suite, fix any failures

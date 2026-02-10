@@ -5,6 +5,7 @@ import { useTeamStore } from '@/stores/teamStore'
 import { useSprintStore } from '@/stores/sprintStore'
 import EditTeamModal from '@/components/EditTeamModal.vue'
 import EditSprintModal from '@/components/EditSprintModal.vue'
+import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import type { Sprint } from '@/types'
 import type { Timestamp } from 'firebase/firestore'
 
@@ -23,6 +24,7 @@ const teamId = computed(() => route.params.id as string)
 const team = computed(() => teamStore.getTeamById(teamId.value))
 const sprints = computed(() => sprintStore.getSprintsForTeam(teamId.value))
 const isLoading = computed(() => teamStore.isLoading || sprintStore.isLoading)
+const storeError = computed(() => teamStore.error || sprintStore.error)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helper Functions
@@ -63,25 +65,67 @@ function handleEditTeam(): void {
   showEditModal.value = true
 }
 
-/**
- * Deletes the team after user confirmation.
- * Also deletes all associated sprints (handled by teamStore.deleteTeam).
- */
-async function handleDeleteTeam(): Promise<void> {
-  if (!team.value) return
+// ─────────────────────────────────────────────────────────────────────────────
+// Confirmation Dialog State
+// ─────────────────────────────────────────────────────────────────────────────
 
-  const sprintCount = sprints.value.length
-  const sprintWarning =
-    sprintCount > 0 ? ` This will also delete all ${sprintCount} sprint(s).` : ''
+const confirmAction = ref<'delete-team' | 'delete-sprint' | null>(null)
+const pendingSprintId = ref<string | null>(null)
+const deleteError = ref<string | null>(null)
 
-  const confirmed = confirm(
-    `Are you sure you want to delete "${team.value.name}"?${sprintWarning} This action cannot be undone.`,
-  )
+const confirmDialogTitle = computed(() => {
+  if (confirmAction.value === 'delete-team') return 'Delete Team'
+  if (confirmAction.value === 'delete-sprint') return 'Delete Sprint'
+  return ''
+})
 
-  if (confirmed) {
-    await teamStore.deleteTeam(teamId.value)
-    router.push('/')
+const confirmDialogMessage = computed(() => {
+  if (confirmAction.value === 'delete-team') {
+    const sprintCount = sprints.value.length
+    const sprintWarning = sprintCount > 0 ? ` This will also delete all ${sprintCount} sprint(s).` : ''
+    return `Are you sure you want to delete "${team.value?.name}"?${sprintWarning} This action cannot be undone.`
   }
+  if (confirmAction.value === 'delete-sprint') {
+    return 'Are you sure you want to delete this sprint? This action cannot be undone.'
+  }
+  return ''
+})
+
+/**
+ * Requests confirmation before deleting the team.
+ */
+function handleDeleteTeam(): void {
+  if (!team.value) return
+  confirmAction.value = 'delete-team'
+}
+
+/**
+ * Executes the confirmed delete action with error handling.
+ */
+async function handleConfirmAction(): Promise<void> {
+  deleteError.value = null
+
+  try {
+    if (confirmAction.value === 'delete-team') {
+      await teamStore.deleteTeam(teamId.value)
+      router.push('/')
+    } else if (confirmAction.value === 'delete-sprint' && pendingSprintId.value) {
+      await sprintStore.deleteSprint(pendingSprintId.value)
+    }
+  } catch (error) {
+    deleteError.value = error instanceof Error ? error.message : 'An unexpected error occurred'
+  } finally {
+    confirmAction.value = null
+    pendingSprintId.value = null
+  }
+}
+
+/**
+ * Cancels the pending confirmation dialog.
+ */
+function handleCancelAction(): void {
+  confirmAction.value = null
+  pendingSprintId.value = null
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -97,16 +141,11 @@ function handleEditSprint(sprintId: string): void {
 }
 
 /**
- * Deletes a sprint after user confirmation.
+ * Requests confirmation before deleting a sprint.
  */
-async function handleDeleteSprint(sprintId: string): Promise<void> {
-  const confirmed = confirm(
-    'Are you sure you want to delete this sprint? This action cannot be undone.',
-  )
-
-  if (confirmed) {
-    await sprintStore.deleteSprint(sprintId)
-  }
+function handleDeleteSprint(sprintId: string): void {
+  confirmAction.value = 'delete-sprint'
+  pendingSprintId.value = sprintId
 }
 </script>
 
@@ -115,6 +154,15 @@ async function handleDeleteSprint(sprintId: string): Promise<void> {
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-container content-width">
       <f-loading-spinner />
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="storeError" class="error-container content-width">
+      <div class="error-card">
+        <h2>Something went wrong</h2>
+        <p>{{ storeError.message || 'Failed to load data' }}</p>
+        <p class="error-hint">Try refreshing the page.</p>
+      </div>
     </div>
 
     <!-- Team Not Found State -->
@@ -128,6 +176,11 @@ async function handleDeleteSprint(sprintId: string): Promise<void> {
 
     <!-- Team Detail Content -->
     <div v-else class="team-content content-width">
+      <!-- Delete Error Banner -->
+      <div v-if="deleteError" class="delete-error" role="alert">
+        {{ deleteError }}
+      </div>
+
       <!-- Header Section -->
       <header class="team-header">
         <div class="header-left">
@@ -231,6 +284,17 @@ async function handleDeleteSprint(sprintId: string): Promise<void> {
       v-if="showEditSprintModal && editingSprint"
       :sprint="editingSprint"
       @close="showEditSprintModal = false; editingSprint = null"
+    />
+
+    <!-- Confirmation Dialog -->
+    <ConfirmDialog
+      v-if="confirmAction"
+      :title="confirmDialogTitle"
+      :message="confirmDialogMessage"
+      confirm-text="Delete"
+      :destructive="true"
+      @confirm="handleConfirmAction"
+      @cancel="handleCancelAction"
     />
   </div>
 </template>
@@ -472,5 +536,50 @@ async function handleDeleteSprint(sprintId: string): Promise<void> {
 
 .delete-btn:hover {
   background: rgba(220, 38, 38, 0.1);
+}
+
+/* Error Container (store-level errors) */
+.error-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.error-card {
+  text-align: center;
+  background: var(--f-background-primary, #fff);
+  border: 1px solid var(--f-border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+.error-card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--f-text-primary, #333);
+}
+
+.error-card p {
+  margin: 0 0 0.5rem 0;
+  color: var(--f-text-primary, #333);
+}
+
+.error-hint {
+  color: var(--f-text-secondary, #666) !important;
+  font-size: 0.875rem;
+}
+
+/* Delete Error Banner */
+.delete-error {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid var(--f-error-color, #dc2626);
+  border-radius: 4px;
+  color: var(--f-error-color, #dc2626);
+  font-size: 0.875rem;
 }
 </style>

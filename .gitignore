@@ -39,3 +39,6 @@ __screenshots__/
 
 # Local prompts
 prompts/
+
+# OMC (oh-my-claudecode) local state
+.omc/

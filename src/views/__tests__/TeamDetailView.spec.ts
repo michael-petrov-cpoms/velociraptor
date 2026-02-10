@@ -37,6 +37,8 @@ const mockTeam = ref<MockTeam | undefined>(undefined)
 const mockSprints = ref<MockSprint[]>([])
 const mockTeamsLoading = ref(false)
 const mockSprintsLoading = ref(false)
+const mockTeamError = ref<Error | undefined>(undefined)
+const mockSprintError = ref<Error | undefined>(undefined)
 const mockDeleteTeam = vi.fn()
 const mockDeleteSprint = vi.fn()
 
@@ -45,6 +47,9 @@ vi.mock('@/stores/teamStore', () => ({
   useTeamStore: () => ({
     get isLoading() {
       return mockTeamsLoading.value
+    },
+    get error() {
+      return mockTeamError.value
     },
     getTeamById: () => mockTeam.value,
     deleteTeam: mockDeleteTeam,
@@ -55,6 +60,9 @@ vi.mock('@/stores/sprintStore', () => ({
   useSprintStore: () => ({
     get isLoading() {
       return mockSprintsLoading.value
+    },
+    get error() {
+      return mockSprintError.value
     },
     getSprintsForTeam: () => mockSprints.value,
     getSprintById: (id: string) => mockSprints.value.find((s) => s.id === id),
@@ -161,8 +169,6 @@ function createMockSprint(
 
 describe('TeamDetailView', () => {
   let wrapper: VueWrapper
-  let confirmSpy: ReturnType<typeof vi.spyOn>
-  let alertSpy: ReturnType<typeof vi.spyOn>
 
   beforeEach(async () => {
     // Reset mocks
@@ -170,14 +176,12 @@ describe('TeamDetailView', () => {
     mockSprints.value = []
     mockTeamsLoading.value = false
     mockSprintsLoading.value = false
+    mockTeamError.value = undefined
+    mockSprintError.value = undefined
     mockRouteParams.value = { id: 'team-123' }
     mockDeleteTeam.mockReset()
     mockDeleteSprint.mockReset()
     mockRouterPush.mockReset()
-
-    // Mock window functions
-    confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false)
-    alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
 
     // Fresh Pinia instance
     setActivePinia(createPinia())
@@ -185,11 +189,6 @@ describe('TeamDetailView', () => {
     // Reset router
     router.push('/team/team-123')
     await router.isReady()
-  })
-
-  afterEach(() => {
-    confirmSpy.mockRestore()
-    alertSpy.mockRestore()
   })
 
   async function mountComponent() {
@@ -234,6 +233,58 @@ describe('TeamDetailView', () => {
       await mountComponent()
 
       expect(wrapper.find('[data-testid="loading-spinner"]').exists()).toBe(false)
+    })
+  })
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Store Error State Tests
+  // ───────────────────────────────────────────────────────────────────────────
+
+  describe('Store Error State', () => {
+    it('shows error card when team store has an error', async () => {
+      mockTeamError.value = new Error('Permission denied')
+
+      await mountComponent()
+
+      expect(wrapper.find('.error-container').exists()).toBe(true)
+      expect(wrapper.find('.error-card').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Something went wrong')
+      expect(wrapper.text()).toContain('Permission denied')
+    })
+
+    it('shows error card when sprint store has an error', async () => {
+      mockSprintError.value = new Error('Network error')
+
+      await mountComponent()
+
+      expect(wrapper.find('.error-container').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Network error')
+    })
+
+    it('shows refresh hint in error state', async () => {
+      mockTeamError.value = new Error('Something broke')
+
+      await mountComponent()
+
+      expect(wrapper.text()).toContain('Try refreshing the page.')
+    })
+
+    it('error state takes priority over not-found state', async () => {
+      mockTeam.value = undefined
+      mockTeamError.value = new Error('Connection failed')
+
+      await mountComponent()
+
+      expect(wrapper.find('.error-container').exists()).toBe(true)
+      expect(wrapper.find('.not-found').exists()).toBe(false)
+    })
+
+    it('does not show error state when stores have no errors', async () => {
+      mockTeam.value = createMockTeam()
+
+      await mountComponent()
+
+      expect(wrapper.find('.error-container').exists()).toBe(false)
     })
   })
 
@@ -399,57 +450,55 @@ describe('TeamDetailView', () => {
       expect(deleteButton?.exists()).toBe(true)
     })
 
-    it('Delete Team button shows confirmation dialog', async () => {
+    it('Delete Team button shows ConfirmDialog', async () => {
       await mountComponent()
+
+      // ConfirmDialog should not be visible initially
+      expect(wrapper.find('.modal-overlay').exists()).toBe(false)
 
       const buttons = wrapper.findAll('button')
       const deleteButton = buttons.find((b) => b.text().includes('Delete Team'))
       await deleteButton?.trigger('click')
 
-      expect(confirmSpy).toHaveBeenCalled()
-      expect(confirmSpy.mock.calls[0]?.[0]).toContain(
-        'Are you sure you want to delete "Alpha Team"?',
-      )
+      // ConfirmDialog should now be visible
+      expect(wrapper.find('.modal-overlay').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Delete Team')
+      expect(wrapper.text()).toContain('Are you sure you want to delete "Alpha Team"?')
     })
 
-    it('confirming deletion calls teamStore.deleteTeam', async () => {
-      confirmSpy.mockReturnValue(true)
-
-      await mountComponent()
-
-      const buttons = wrapper.findAll('button')
-      const deleteButton = buttons.find((b) => b.text().includes('Delete Team'))
-      await deleteButton?.trigger('click')
-
-      expect(mockDeleteTeam).toHaveBeenCalledWith('team-123')
-    })
-
-    it('canceling deletion does not call teamStore.deleteTeam', async () => {
-      confirmSpy.mockReturnValue(false)
-
-      await mountComponent()
-
-      const buttons = wrapper.findAll('button')
-      const deleteButton = buttons.find((b) => b.text().includes('Delete Team'))
-      await deleteButton?.trigger('click')
-
-      expect(mockDeleteTeam).not.toHaveBeenCalled()
-    })
-
-    it('after deletion, navigates to home route', async () => {
-      confirmSpy.mockReturnValue(true)
+    it('confirming team deletion calls teamStore.deleteTeam and navigates home', async () => {
       mockDeleteTeam.mockResolvedValue(undefined)
 
       await mountComponent()
 
+      // Open the confirm dialog
       const buttons = wrapper.findAll('button')
       const deleteButton = buttons.find((b) => b.text().includes('Delete Team'))
       await deleteButton?.trigger('click')
 
-      // Wait for async operation
+      // Click the confirm button in the dialog
+      await wrapper.find('.btn-confirm').trigger('click')
       await wrapper.vm.$nextTick()
 
+      expect(mockDeleteTeam).toHaveBeenCalledWith('team-123')
       expect(mockRouterPush).toHaveBeenCalledWith('/')
+    })
+
+    it('canceling team deletion does not call teamStore.deleteTeam', async () => {
+      await mountComponent()
+
+      // Open the confirm dialog
+      const buttons = wrapper.findAll('button')
+      const deleteButton = buttons.find((b) => b.text().includes('Delete Team'))
+      await deleteButton?.trigger('click')
+
+      // Click the cancel button in the dialog
+      await wrapper.find('.btn-cancel').trigger('click')
+      await wrapper.vm.$nextTick()
+
+      expect(mockDeleteTeam).not.toHaveBeenCalled()
+      // Dialog should be closed
+      expect(wrapper.find('.modal-overlay').exists()).toBe(false)
     })
 
     it('delete confirmation shows sprint count warning', async () => {
@@ -461,7 +510,23 @@ describe('TeamDetailView', () => {
       const deleteButton = buttons.find((b) => b.text().includes('Delete Team'))
       await deleteButton?.trigger('click')
 
-      expect(confirmSpy.mock.calls[0]?.[0]).toContain('delete all 2 sprint(s)')
+      expect(wrapper.text()).toContain('delete all 2 sprint(s)')
+    })
+
+    it('shows deleteError banner when team deletion fails', async () => {
+      mockDeleteTeam.mockRejectedValue(new Error('Delete failed'))
+
+      await mountComponent()
+
+      // Open and confirm deletion
+      const buttons = wrapper.findAll('button')
+      const deleteButton = buttons.find((b) => b.text().includes('Delete Team'))
+      await deleteButton?.trigger('click')
+      await wrapper.find('.btn-confirm').trigger('click')
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.find('.delete-error').exists()).toBe(true)
+      expect(wrapper.find('.delete-error').text()).toContain('Delete failed')
     })
   })
 
@@ -708,36 +773,39 @@ describe('TeamDetailView', () => {
       expect(wrapper.find('[data-testid="edit-sprint-modal"]').exists()).toBe(true)
     })
 
-    it('Delete Sprint button shows confirmation dialog', async () => {
+    it('Delete Sprint button shows ConfirmDialog', async () => {
       await mountComponent()
 
       const deleteButton = wrapper.find('.delete-btn')
       await deleteButton.trigger('click')
 
-      expect(confirmSpy).toHaveBeenCalled()
-      expect(confirmSpy.mock.calls[0]?.[0]).toContain(
-        'Are you sure you want to delete this sprint?',
-      )
+      expect(wrapper.find('.modal-overlay').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Delete Sprint')
+      expect(wrapper.text()).toContain('Are you sure you want to delete this sprint?')
     })
 
     it('confirming sprint deletion calls sprintStore.deleteSprint with correct ID', async () => {
-      confirmSpy.mockReturnValue(true)
+      mockDeleteSprint.mockResolvedValue(undefined)
 
       await mountComponent()
 
       const deleteButton = wrapper.find('.delete-btn')
       await deleteButton.trigger('click')
+
+      await wrapper.find('.btn-confirm').trigger('click')
+      await wrapper.vm.$nextTick()
 
       expect(mockDeleteSprint).toHaveBeenCalledWith('sprint-1')
     })
 
     it('canceling sprint deletion does not call deleteSprint', async () => {
-      confirmSpy.mockReturnValue(false)
-
       await mountComponent()
 
       const deleteButton = wrapper.find('.delete-btn')
       await deleteButton.trigger('click')
+
+      await wrapper.find('.btn-cancel').trigger('click')
+      await wrapper.vm.$nextTick()
 
       expect(mockDeleteSprint).not.toHaveBeenCalled()
     })
@@ -747,32 +815,31 @@ describe('TeamDetailView', () => {
         createMockSprint({ id: 'sprint-abc' }),
         createMockSprint({ id: 'sprint-xyz' }),
       ]
-      confirmSpy.mockReturnValue(true)
+      mockDeleteSprint.mockResolvedValue(undefined)
 
       await mountComponent()
 
       const deleteButtons = wrapper.findAll('.delete-btn')
       await deleteButtons[1]?.trigger('click')
+
+      await wrapper.find('.btn-confirm').trigger('click')
+      await wrapper.vm.$nextTick()
 
       expect(mockDeleteSprint).toHaveBeenCalledWith('sprint-xyz')
     })
 
-    it('multiple sprints can be deleted independently', async () => {
-      mockSprints.value = [
-        createMockSprint({ id: 'sprint-1' }),
-        createMockSprint({ id: 'sprint-2' }),
-      ]
-      confirmSpy.mockReturnValue(true)
+    it('shows deleteError banner when sprint deletion fails', async () => {
+      mockDeleteSprint.mockRejectedValue(new Error('Sprint delete failed'))
 
       await mountComponent()
 
-      const deleteButtons = wrapper.findAll('.delete-btn')
-      await deleteButtons[0]?.trigger('click')
-      await deleteButtons[1]?.trigger('click')
+      const deleteButton = wrapper.find('.delete-btn')
+      await deleteButton.trigger('click')
+      await wrapper.find('.btn-confirm').trigger('click')
+      await wrapper.vm.$nextTick()
 
-      expect(mockDeleteSprint).toHaveBeenCalledTimes(2)
-      expect(mockDeleteSprint).toHaveBeenCalledWith('sprint-1')
-      expect(mockDeleteSprint).toHaveBeenCalledWith('sprint-2')
+      expect(wrapper.find('.delete-error').exists()).toBe(true)
+      expect(wrapper.find('.delete-error').text()).toContain('Sprint delete failed')
     })
   })
 
@@ -835,6 +902,21 @@ describe('TeamDetailView', () => {
       // Native buttons are keyboard accessible by default
       expect(editBtn.element.tagName).toBe('BUTTON')
       expect(deleteBtn.element.tagName).toBe('BUTTON')
+    })
+
+    it('deleteError banner has role="alert"', async () => {
+      mockDeleteTeam.mockRejectedValue(new Error('Delete failed'))
+
+      await mountComponent()
+
+      // Trigger delete error
+      const buttons = wrapper.findAll('button')
+      const deleteButton = buttons.find((b) => b.text().includes('Delete Team'))
+      await deleteButton?.trigger('click')
+      await wrapper.find('.btn-confirm').trigger('click')
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.find('.delete-error').attributes('role')).toBe('alert')
     })
   })
 
