@@ -342,9 +342,7 @@ describe('LogSprintView', () => {
 
       expect(wrapper.text()).not.toContain('Points completed is required')
       expect(wrapper.text()).not.toContain('Points cannot be negative')
-      expect(mockAddSprint).toHaveBeenCalledWith(
-        expect.objectContaining({ pointsCompleted: 10.5 }),
-      )
+      expect(mockAddSprint).toHaveBeenCalledWith(expect.objectContaining({ pointsCompleted: 10.5 }))
     })
   })
 
@@ -397,9 +395,7 @@ describe('LogSprintView', () => {
 
       expect(wrapper.text()).not.toContain('Leave days is required')
       expect(wrapper.text()).not.toContain('Leave days cannot be negative')
-      expect(mockAddSprint).toHaveBeenCalledWith(
-        expect.objectContaining({ leaveDays: 2.5 }),
-      )
+      expect(mockAddSprint).toHaveBeenCalledWith(expect.objectContaining({ leaveDays: 2.5 }))
     })
   })
 

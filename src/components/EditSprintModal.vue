@@ -27,9 +27,7 @@ const sprintStore = useSprintStore()
 // Form State — pre-filled from the sprint prop
 // ─────────────────────────────────────────────────────────────────────────────
 
-const endDate = ref<string>(
-  props.sprint.endDate.toDate().toISOString().split('T')[0],
-)
+const endDate = ref<string>(props.sprint.endDate.toDate().toISOString().split('T')[0]!)
 const pointsCompleted = ref<number | null>(props.sprint.pointsCompleted)
 const leaveDays = ref<number | null>(props.sprint.leaveDays)
 
@@ -240,9 +238,7 @@ function handleClose() {
             <p v-if="leaveDaysError" class="field-error" role="alert">
               {{ leaveDaysError }}
             </p>
-            <p class="field-hint">
-              Total person-days of leave across all developers
-            </p>
+            <p class="field-hint">Total person-days of leave across all developers</p>
           </div>
 
           <!-- Submit Error -->

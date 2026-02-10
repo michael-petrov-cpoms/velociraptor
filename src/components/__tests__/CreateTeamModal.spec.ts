@@ -259,9 +259,7 @@ describe('CreateTeamModal', () => {
       await wrapper.find('#baseline-velocity').setValue(0)
       await clickSubmit()
 
-      expect(mockAddTeam).toHaveBeenCalledWith(
-        expect.objectContaining({ baselineVelocity: 0 }),
-      )
+      expect(mockAddTeam).toHaveBeenCalledWith(expect.objectContaining({ baselineVelocity: 0 }))
     })
   })
 
@@ -291,9 +289,7 @@ describe('CreateTeamModal', () => {
       await wrapper.find('#sprint-length').setValue(14)
       await clickSubmit()
 
-      expect(mockAddTeam).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'Padded Team' }),
-      )
+      expect(mockAddTeam).toHaveBeenCalledWith(expect.objectContaining({ name: 'Padded Team' }))
     })
 
     it('includes baselineVelocity when provided', async () => {
@@ -302,9 +298,7 @@ describe('CreateTeamModal', () => {
       await wrapper.find('#baseline-velocity').setValue(30)
       await clickSubmit()
 
-      expect(mockAddTeam).toHaveBeenCalledWith(
-        expect.objectContaining({ baselineVelocity: 30 }),
-      )
+      expect(mockAddTeam).toHaveBeenCalledWith(expect.objectContaining({ baselineVelocity: 30 }))
     })
 
     it('omits baselineVelocity when empty', async () => {
@@ -497,9 +491,7 @@ describe('CreateTeamModal', () => {
       await wrapper.find('#baseline-velocity').setValue(25.5)
       await clickSubmit()
 
-      expect(mockAddTeam).toHaveBeenCalledWith(
-        expect.objectContaining({ baselineVelocity: 25.5 }),
-      )
+      expect(mockAddTeam).toHaveBeenCalledWith(expect.objectContaining({ baselineVelocity: 25.5 }))
     })
 
     it('handles exactly 50 character team name', async () => {
@@ -532,9 +524,7 @@ describe('CreateTeamModal', () => {
       await wrapper.find('#sprint-length').setValue(30)
       await clickSubmit()
 
-      expect(mockAddTeam).toHaveBeenCalledWith(
-        expect.objectContaining({ sprintLengthDays: 30 }),
-      )
+      expect(mockAddTeam).toHaveBeenCalledWith(expect.objectContaining({ sprintLengthDays: 30 }))
     })
   })
 })

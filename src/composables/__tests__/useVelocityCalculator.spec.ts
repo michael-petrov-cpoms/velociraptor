@@ -358,11 +358,31 @@ describe('useVelocityCalculator', () => {
 
     it('should drop baseline when 5+ sprints', () => {
       const sprints = ref<Sprint[]>([
-        createMockSprint({ id: 's1', pointsCompleted: 28, endDate: { toMillis: () => 5 } as Timestamp }),
-        createMockSprint({ id: 's2', pointsCompleted: 28, endDate: { toMillis: () => 4 } as Timestamp }),
-        createMockSprint({ id: 's3', pointsCompleted: 28, endDate: { toMillis: () => 3 } as Timestamp }),
-        createMockSprint({ id: 's4', pointsCompleted: 28, endDate: { toMillis: () => 2 } as Timestamp }),
-        createMockSprint({ id: 's5', pointsCompleted: 28, endDate: { toMillis: () => 1 } as Timestamp }),
+        createMockSprint({
+          id: 's1',
+          pointsCompleted: 28,
+          endDate: { toMillis: () => 5 } as Timestamp,
+        }),
+        createMockSprint({
+          id: 's2',
+          pointsCompleted: 28,
+          endDate: { toMillis: () => 4 } as Timestamp,
+        }),
+        createMockSprint({
+          id: 's3',
+          pointsCompleted: 28,
+          endDate: { toMillis: () => 3 } as Timestamp,
+        }),
+        createMockSprint({
+          id: 's4',
+          pointsCompleted: 28,
+          endDate: { toMillis: () => 2 } as Timestamp,
+        }),
+        createMockSprint({
+          id: 's5',
+          pointsCompleted: 28,
+          endDate: { toMillis: () => 1 } as Timestamp,
+        }),
       ])
       const team = ref(
         createMockTeam({

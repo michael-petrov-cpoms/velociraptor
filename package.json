@@ -14,7 +14,9 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
+    "lint:ci": "eslint .",
     "format": "prettier --write --experimental-cli src/",
+    "format:check": "prettier --check src/",
     "firebase:deploy:rules": "firebase deploy --only firestore:rules",
     "firebase:deploy:indexes": "firebase deploy --only firestore:indexes"
   },

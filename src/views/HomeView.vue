@@ -84,9 +84,7 @@ const teamsWithStats = computed(() =>
             <template v-if="team.stats.lastVelocity !== null">
               Last: {{ team.stats.lastVelocity }} pts
             </template>
-            <template v-else>
-              No sprints yet
-            </template>
+            <template v-else> No sprints yet </template>
           </span>
         </div>
       </RouterLink>
@@ -196,7 +194,9 @@ const teamsWithStats = computed(() =>
   border-radius: 8px;
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .team-card:hover {

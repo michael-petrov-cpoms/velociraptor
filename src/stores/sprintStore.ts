@@ -1,14 +1,7 @@
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useCollection } from 'vuefire'
-import {
-  collection,
-  doc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp,
-} from 'firebase/firestore'
+import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import type { Sprint } from '@/types'
 
@@ -73,9 +66,7 @@ export const useSprintStore = defineStore('sprints', () => {
    * @param sprintData - Sprint data without id and createdAt (auto-generated)
    * @returns The auto-generated Firestore document ID
    */
-  async function addSprint(
-    sprintData: Omit<Sprint, 'id' | 'createdAt'>,
-  ): Promise<string> {
+  async function addSprint(sprintData: Omit<Sprint, 'id' | 'createdAt'>): Promise<string> {
     const docRef = await addDoc(sprintsRef, {
       ...sprintData,
       createdAt: serverTimestamp(),

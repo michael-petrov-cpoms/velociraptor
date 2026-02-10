@@ -8,7 +8,7 @@ import { ref, onMounted } from 'vue'
  * Auto-focuses the cancel button to prevent accidental confirmations.
  */
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     title: string
     message: string
@@ -41,7 +41,12 @@ onMounted(() => {
 
 <template>
   <div class="modal-overlay" @click.self="emit('cancel')" @keydown.escape="emit('cancel')">
-    <div class="modal-container" role="alertdialog" aria-modal="true" :aria-labelledby="'confirm-dialog-title'">
+    <div
+      class="modal-container"
+      role="alertdialog"
+      aria-modal="true"
+      :aria-labelledby="'confirm-dialog-title'"
+    >
       <!-- Header -->
       <header class="modal-header">
         <h2 id="confirm-dialog-title">{{ title }}</h2>
@@ -54,12 +59,7 @@ onMounted(() => {
 
       <!-- Footer -->
       <footer class="modal-footer">
-        <button
-          ref="cancelButtonRef"
-          type="button"
-          class="btn btn-cancel"
-          @click="emit('cancel')"
-        >
+        <button ref="cancelButtonRef" type="button" class="btn btn-cancel" @click="emit('cancel')">
           {{ cancelText }}
         </button>
         <button

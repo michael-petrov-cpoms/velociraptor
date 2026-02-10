@@ -57,7 +57,11 @@ const endDateError = computed(() => {
 
 const pointsCompletedError = computed(() => {
   if (!hasAttemptedSubmit.value) return null
-  if (pointsCompleted.value === null || pointsCompleted.value === undefined || (pointsCompleted.value as unknown) === '') {
+  if (
+    pointsCompleted.value === null ||
+    pointsCompleted.value === undefined ||
+    (pointsCompleted.value as unknown) === ''
+  ) {
     return 'Points completed is required'
   }
   if (pointsCompleted.value < 0) return 'Points cannot be negative'
@@ -66,13 +70,17 @@ const pointsCompletedError = computed(() => {
 
 const leaveDaysError = computed(() => {
   if (!hasAttemptedSubmit.value) return null
-  if (leaveDays.value === null || leaveDays.value === undefined || (leaveDays.value as unknown) === '') {
+  if (
+    leaveDays.value === null ||
+    leaveDays.value === undefined ||
+    (leaveDays.value as unknown) === ''
+  ) {
     return 'Leave days is required'
   }
   if (leaveDays.value < 0) return 'Leave days cannot be negative'
   // Cross-field validation: available days must be at least 1
   if (team.value && leaveDays.value !== null && team.value.developerCount > 0) {
-    const availableDays = team.value.sprintLengthDays - (leaveDays.value / team.value.developerCount)
+    const availableDays = team.value.sprintLengthDays - leaveDays.value / team.value.developerCount
     if (availableDays < 1) {
       return 'Leave days too high — available days must be at least 1'
     }
@@ -84,11 +92,7 @@ const leaveDaysError = computed(() => {
  * Returns true if the form has no validation errors.
  */
 const isFormValid = computed(() => {
-  return (
-    !endDateError.value &&
-    !pointsCompletedError.value &&
-    !leaveDaysError.value
-  )
+  return !endDateError.value && !pointsCompletedError.value && !leaveDaysError.value
 })
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -247,9 +251,7 @@ async function handleSubmit() {
             <p v-if="leaveDaysError" class="field-error" role="alert">
               {{ leaveDaysError }}
             </p>
-            <p class="field-hint">
-              Total person-days of leave across all developers
-            </p>
+            <p class="field-hint">Total person-days of leave across all developers</p>
           </div>
 
           <!-- Submit Error -->
