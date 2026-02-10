@@ -342,7 +342,7 @@ describe('TeamDetailView', () => {
     it('displays team name as page heading', async () => {
       await mountComponent()
 
-      expect(wrapper.find('.team-header h1').text()).toBe('Alpha Team')
+      expect(wrapper.find('.team-header h1').text()).toBe('Team Alpha Team')
     })
 
     it('displays member count', async () => {
@@ -904,6 +904,24 @@ describe('TeamDetailView', () => {
       expect(deleteBtn.element.tagName).toBe('BUTTON')
     })
 
+    it('Baseline Velocity label has explanatory tooltip', async () => {
+      mockTeam.value = createMockTeam({ baselineVelocity: 30 })
+
+      await mountComponent()
+
+      const label = wrapper.find('.info-label.has-tooltip')
+      expect(label.exists()).toBe(true)
+      expect(label.attributes('data-tooltip')).toContain('expected points per sprint')
+    })
+
+    it('Leave Days column header has explanatory tooltip', async () => {
+      await mountComponent()
+
+      const headers = wrapper.findAll('th')
+      const leaveDaysHeader = headers.find((h) => h.text().includes('Leave Days'))
+      expect(leaveDaysHeader?.attributes('data-tooltip')).toContain('person-days of leave')
+    })
+
     it('deleteError banner has role="alert"', async () => {
       mockDeleteTeam.mockRejectedValue(new Error('Delete failed'))
 
@@ -973,7 +991,7 @@ describe('TeamDetailView', () => {
 
       await mountComponent()
 
-      expect(wrapper.find('.team-header h1').text()).toBe('A'.repeat(50))
+      expect(wrapper.find('.team-header h1').text()).toBe('Team ' + 'A'.repeat(50))
     })
 
     it('handles baselineVelocity of 0', async () => {

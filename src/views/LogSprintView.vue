@@ -167,7 +167,7 @@ async function handleSubmit() {
       <!-- Header -->
       <header class="page-header">
         <RouterLink :to="`/team/${teamId}`" class="back-link">
-          &larr; Back to {{ team.name }}
+          &larr; Back to Team {{ team.name }}
         </RouterLink>
         <h1>Log Sprint</h1>
       </header>
@@ -360,13 +360,27 @@ async function handleSubmit() {
 }
 
 .back-link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.25rem;
   font-size: 0.875rem;
-  color: var(--f-primary, #0066cc);
+  font-weight: 500;
+  color: var(--f-text-primary, #333);
   text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--f-border-color, #e0e0e0);
+  border-radius: 9999px;
+  background: var(--f-background-primary, #fff);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+  background: var(--f-background-secondary, #f5f5f5);
+  border-color: var(--f-text-secondary, #666);
+  text-decoration: none;
 }
 
 .page-header h1 {

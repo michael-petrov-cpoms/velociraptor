@@ -191,11 +191,11 @@ function handleDeleteSprint(sprintId: string): void {
       <header class="team-header">
         <div class="header-left">
           <RouterLink to="/" class="back-link"> ← Back to Teams </RouterLink>
-          <h1>{{ team.name }}</h1>
+          <h1>Team {{ team.name }}</h1>
         </div>
         <div class="header-actions">
           <f-button text="Edit Team" type="secondary" @click="handleEditTeam" />
-          <f-button text="Delete Team" type="tertiary" @click="handleDeleteTeam" />
+          <button class="btn-delete-team" @click="handleDeleteTeam">Delete Team</button>
         </div>
       </header>
 
@@ -216,7 +216,11 @@ function handleDeleteSprint(sprintId: string): void {
             <span class="info-value">{{ team.sprintLengthDays }} days</span>
           </div>
           <div v-if="team.baselineVelocity !== undefined" class="info-item">
-            <span class="info-label">Baseline Velocity</span>
+            <span
+              class="info-label has-tooltip"
+              data-tooltip="Your team's expected points per sprint. Used as a data point in velocity averaging when fewer than 5 sprints are logged."
+              >Baseline Velocity</span
+            >
             <span class="info-value">{{ team.baselineVelocity }} pts/sprint</span>
           </div>
         </div>
@@ -248,7 +252,13 @@ function handleDeleteSprint(sprintId: string): void {
             <tr>
               <th scope="col">End Date</th>
               <th scope="col" class="text-right">Points</th>
-              <th scope="col" class="text-right">Leave Days</th>
+              <th
+                scope="col"
+                class="text-right has-tooltip"
+                data-tooltip="Total person-days of leave across all developers for this sprint."
+              >
+                Leave Days
+              </th>
               <th scope="col" class="text-right">Developers</th>
               <th scope="col" class="text-right">Actions</th>
             </tr>
@@ -360,13 +370,26 @@ function handleDeleteSprint(sprintId: string): void {
 }
 
 .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   font-size: 0.875rem;
-  color: var(--f-primary, #0066cc);
+  font-weight: 500;
+  color: var(--f-text-primary, #333);
   text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--f-border-color, #e0e0e0);
+  border-radius: 9999px;
+  background: var(--f-background-primary, #fff);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+  background: var(--f-background-secondary, #f5f5f5);
+  border-color: var(--f-text-secondary, #666);
+  text-decoration: none;
 }
 
 .team-header h1 {
@@ -517,8 +540,9 @@ function handleDeleteSprint(sprintId: string): void {
 }
 
 .action-btn {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -576,6 +600,61 @@ function handleDeleteSprint(sprintId: string): void {
 .error-hint {
   color: var(--f-text-secondary, #666) !important;
   font-size: 0.875rem;
+}
+
+/* Delete Team Button */
+.btn-delete-team {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--f-error-color, #dc2626);
+  background: transparent;
+  border: 1px solid var(--f-error-color, #dc2626);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-delete-team:hover {
+  background: var(--f-error-color, #dc2626);
+  color: #fff;
+}
+
+/* Tooltip Styling */
+.has-tooltip {
+  cursor: help;
+  border-bottom: 1px dotted currentColor;
+  position: relative;
+}
+
+.has-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  background: var(--f-text-primary, #333);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: normal;
+  width: max-content;
+  max-width: 260px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease;
+  z-index: 100;
+}
+
+.has-tooltip:hover::after {
+  opacity: 1;
 }
 
 /* Delete Error Banner */
