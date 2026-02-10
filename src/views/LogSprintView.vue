@@ -21,6 +21,7 @@ const sprintStore = useSprintStore()
 const teamId = computed(() => route.params.id as string)
 const team = computed(() => teamStore.getTeamById(teamId.value))
 const isLoading = computed(() => teamStore.isLoading)
+const storeError = computed(() => teamStore.error)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Form State
@@ -137,6 +138,15 @@ async function handleSubmit() {
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-container content-width">
       <f-loading-spinner />
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="storeError" class="error-container content-width">
+      <div class="error-card">
+        <h2>Something went wrong</h2>
+        <p>{{ storeError.message || 'Failed to load data' }}</p>
+        <p class="error-hint">Try refreshing the page.</p>
+      </div>
     </div>
 
     <!-- Team Not Found State -->
@@ -285,6 +295,41 @@ async function handleSubmit() {
   justify-content: center;
   align-items: center;
   min-height: 200px;
+}
+
+/* Error State */
+.error-container {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.error-card {
+  display: inline-block;
+  padding: 1.5rem 2rem;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid var(--f-error-color, #dc2626);
+  border-radius: 8px;
+  color: var(--f-error-color, #dc2626);
+  max-width: 500px;
+}
+
+.error-card h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.error-card p {
+  margin: 0 0 0.5rem 0;
+}
+
+.error-card p:last-child {
+  margin-bottom: 0;
+}
+
+.error-hint {
+  font-size: 0.875rem;
+  opacity: 0.8;
 }
 
 /* Not Found State */

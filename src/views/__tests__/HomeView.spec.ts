@@ -9,6 +9,8 @@ import HomeView from '../HomeView.vue'
 const mockTeams = ref<Array<{ id: string; name: string; developerCount?: number }>>([])
 const mockTeamsLoading = ref(false)
 const mockSprintsLoading = ref(false)
+const mockTeamError = ref<Error | null>(null)
+const mockSprintError = ref<Error | null>(null)
 const mockGetSprintsForTeam = vi.fn()
 
 // Mock the stores using getters to properly simulate Pinia's auto-unwrapping behavior
@@ -22,7 +24,7 @@ vi.mock('@/stores/teamStore', () => ({
       return mockTeamsLoading.value
     },
     get error() {
-      return null
+      return mockTeamError.value
     },
   }),
 }))
@@ -36,7 +38,7 @@ vi.mock('@/stores/sprintStore', () => ({
       return mockSprintsLoading.value
     },
     get error() {
-      return null
+      return mockSprintError.value
     },
     getSprintsForTeam: mockGetSprintsForTeam,
   }),
@@ -70,6 +72,8 @@ describe('HomeView', () => {
     mockTeams.value = []
     mockTeamsLoading.value = false
     mockSprintsLoading.value = false
+    mockTeamError.value = null
+    mockSprintError.value = null
     mockGetSprintsForTeam.mockReset()
     mockGetSprintsForTeam.mockReturnValue([])
 
@@ -120,6 +124,46 @@ describe('HomeView', () => {
       await mountComponent()
 
       expect(wrapper.find('[data-testid="loading-spinner"]').exists()).toBe(false)
+    })
+  })
+
+  describe('Error State', () => {
+    it('shows error card when teamStore has an error', async () => {
+      mockTeamError.value = new Error('Permission denied')
+
+      await mountComponent()
+
+      expect(wrapper.find('.error-card').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Something went wrong')
+      expect(wrapper.text()).toContain('Permission denied')
+    })
+
+    it('shows error card when sprintStore has an error', async () => {
+      mockSprintError.value = new Error('Network error')
+
+      await mountComponent()
+
+      expect(wrapper.find('.error-card').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Network error')
+    })
+
+    it('does not show error card when no errors exist', async () => {
+      mockTeamError.value = null
+      mockSprintError.value = null
+
+      await mountComponent()
+
+      expect(wrapper.find('.error-card').exists()).toBe(false)
+    })
+
+    it('error state takes priority over empty state', async () => {
+      mockTeamError.value = new Error('Firestore unavailable')
+      mockTeams.value = []
+
+      await mountComponent()
+
+      expect(wrapper.find('.error-card').exists()).toBe(true)
+      expect(wrapper.find('.empty-state').exists()).toBe(false)
     })
   })
 
