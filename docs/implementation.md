@@ -267,19 +267,19 @@ Before Step 1.2, the user must configure GitLab registry access for `@raptor/fea
 - [x] Write component tests
 - [x] Commit: "feat: add edit sprint modal"
 
-### Step 3.7: Plan Sprint Calculator
-- [ ] Create `src/views/PlanSprintView.vue`
-- [ ] Input: expected leave days for upcoming sprint (allow 0.5 increments)
-- [ ] Display calculations (see Velocity Formula section):
+### Step 3.7: Plan Sprint Calculator ✓
+- [x] Create `src/views/PlanSprintView.vue`
+- [x] Input: expected leave days for upcoming sprint (allow 0.5 increments)
+- [x] Display calculations (see Velocity Formula section):
   - **Recommended points**: `recommendedPoints` (rounded down)
   - **Capacity %**: `capacityPercentage` (e.g., "Team is at 85% capacity")
   - **Comparison**: `comparisonDelta` (e.g., "-5 points vs full capacity" or "Full capacity")
-- [ ] Create custom capacity visualization bar (styled div or CSS progress)
-- [ ] Handle teams with no history:
+- [x] Create custom capacity visualization bar (styled div or CSS progress)
+- [x] Handle teams with no history:
   - If baseline exists: use baseline, show "Based on baseline estimate"
   - If no baseline: show message to log sprints first
-- [ ] Write component tests
-- [ ] Commit: "feat: implement sprint planning calculator"
+- [x] Write component tests
+- [x] Commit: "feat: implement sprint planning calculator"
 
 ---
 
