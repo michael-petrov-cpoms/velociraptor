@@ -719,7 +719,7 @@ describe('TeamDetailView', () => {
       await mountComponent()
 
       const badge = wrapper.find('.mismatch-badge')
-      expect(badge.attributes('title')).toBe('Team now has 5 developers')
+      expect(badge.attributes('data-tooltip')).toBe('Team now has 5 developers')
     })
 
     it('handles multiple sprints with varying mismatch states', async () => {
@@ -884,13 +884,13 @@ describe('TeamDetailView', () => {
       })
     })
 
-    it('mismatch badge has accessible title attribute', async () => {
+    it('mismatch badge has accessible tooltip attribute', async () => {
       mockSprints.value = [createMockSprint({ developerCount: 4 })]
 
       await mountComponent()
 
       const badge = wrapper.find('.mismatch-badge')
-      expect(badge.attributes('title')).toBeTruthy()
+      expect(badge.attributes('data-tooltip')).toBeTruthy()
     })
 
     it('action buttons are keyboard accessible (native buttons)', async () => {

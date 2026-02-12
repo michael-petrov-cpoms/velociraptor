@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import { ref, nextTick } from 'vue'
@@ -80,7 +80,7 @@ const router = createRouter({
   ],
 })
 
-// Stub FeatherUI components
+// Stub FeatherUI components and ConfirmDialog
 const globalStubs = {
   'f-button': {
     template: '<button :disabled="disabled" @click="$emit(\'click\')">{{ text }}</button>',
@@ -89,6 +89,12 @@ const globalStubs = {
   },
   'f-loading-spinner': {
     template: '<div data-testid="loading-spinner">Loading...</div>',
+  },
+  ConfirmDialog: {
+    template:
+      '<div class="confirm-dialog" data-testid="confirm-dialog"><span class="dialog-message">{{ message }}</span><button class="confirm-btn" @click="$emit(\'confirm\')">{{ confirmText }}</button><button class="cancel-btn" @click="$emit(\'cancel\')">Cancel</button></div>',
+    props: ['title', 'message', 'confirmText', 'destructive'],
+    emits: ['confirm', 'cancel'],
   },
 }
 
@@ -127,7 +133,6 @@ function futureDateString(): string {
 
 describe('LogSprintView', () => {
   let wrapper: VueWrapper
-  let confirmSpy: ReturnType<typeof vi.spyOn>
 
   beforeEach(async () => {
     // Reset mocks
@@ -138,16 +143,9 @@ describe('LogSprintView', () => {
     mockAddSprint.mockResolvedValue('sprint-new-id')
     mockRouterPush.mockReset()
 
-    // Mock window.confirm
-    confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
-
     // Reset router
     router.push('/team/team-123/log')
     await router.isReady()
-  })
-
-  afterEach(() => {
-    confirmSpy.mockRestore()
   })
 
   async function mountComponent() {
@@ -452,49 +450,54 @@ describe('LogSprintView', () => {
       mockTeam.value = { ...mockTeamData }
     })
 
-    it('shows window.confirm when pointsCompleted is 0', async () => {
+    it('shows ConfirmDialog when pointsCompleted is 0', async () => {
       await mountComponent()
       await wrapper.find('#end-date').setValue(pastDateString())
       await wrapper.find('#points-completed').setValue(0)
       await wrapper.find('#leave-days').setValue(0)
       await clickSubmit()
 
-      expect(confirmSpy).toHaveBeenCalledWith(
-        "Points completed is 0. This will lower the team's average velocity. Continue?",
+      expect(wrapper.find('[data-testid="confirm-dialog"]').exists()).toBe(true)
+      expect(wrapper.find('.dialog-message').text()).toContain(
+        "This will lower the team's average velocity",
       )
     })
 
-    it('submits when user confirms', async () => {
-      confirmSpy.mockReturnValue(true)
-
+    it('submits when user confirms zero-point warning', async () => {
       await mountComponent()
       await wrapper.find('#end-date').setValue(pastDateString())
       await wrapper.find('#points-completed').setValue(0)
       await wrapper.find('#leave-days').setValue(0)
       await clickSubmit()
+
+      // Click confirm on the dialog
+      await wrapper.find('.confirm-btn').trigger('click')
       await nextTick()
 
       expect(mockAddSprint).toHaveBeenCalled()
     })
 
-    it('does NOT submit when user cancels', async () => {
-      confirmSpy.mockReturnValue(false)
-
+    it('does NOT submit when user cancels zero-point warning', async () => {
       await mountComponent()
       await wrapper.find('#end-date').setValue(pastDateString())
       await wrapper.find('#points-completed').setValue(0)
       await wrapper.find('#leave-days').setValue(0)
       await clickSubmit()
 
+      // Click cancel on the dialog
+      await wrapper.find('.cancel-btn').trigger('click')
+      await nextTick()
+
       expect(mockAddSprint).not.toHaveBeenCalled()
+      expect(wrapper.find('[data-testid="confirm-dialog"]').exists()).toBe(false)
     })
 
-    it('does NOT show confirm for non-zero points', async () => {
+    it('does NOT show ConfirmDialog for non-zero points', async () => {
       await mountComponent()
       await fillValidForm()
       await clickSubmit()
 
-      expect(confirmSpy).not.toHaveBeenCalled()
+      expect(wrapper.find('[data-testid="confirm-dialog"]').exists()).toBe(false)
     })
   })
 

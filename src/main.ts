@@ -13,6 +13,10 @@ import { firebaseApp } from './firebase/config'
 
 const app = createApp(App)
 
+app.config.errorHandler = (err, instance, info) => {
+  console.error(`[Velociraptor] Unhandled error in ${info}:`, err)
+}
+
 app.use(createPinia())
 app.use(router)
 app.use(VueFire, { firebaseApp })

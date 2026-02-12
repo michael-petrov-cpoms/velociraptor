@@ -4,6 +4,7 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { Timestamp } from 'firebase/firestore'
 import { useTeamStore } from '@/stores/teamStore'
 import { useSprintStore } from '@/stores/sprintStore'
+import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Route & Store Setup
@@ -38,6 +39,7 @@ const leaveDays = ref<number | null>(null)
 const isSubmitting = ref(false)
 const submitError = ref<string | null>(null)
 const hasAttemptedSubmit = ref(false)
+const showZeroPointWarning = ref(false)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Validation
@@ -109,14 +111,16 @@ async function handleSubmit() {
 
   if (!isFormValid.value) return
 
-  // Zero-point warning
+  // Zero-point warning — show dialog instead of blocking window.confirm
   if (pointsCompleted.value === 0) {
-    const confirmed = window.confirm(
-      "Points completed is 0. This will lower the team's average velocity. Continue?",
-    )
-    if (!confirmed) return
+    showZeroPointWarning.value = true
+    return
   }
 
+  await proceedWithSubmit()
+}
+
+async function proceedWithSubmit() {
   isSubmitting.value = true
 
   try {
@@ -134,6 +138,15 @@ async function handleSubmit() {
   } finally {
     isSubmitting.value = false
   }
+}
+
+function handleConfirmZeroPoint() {
+  showZeroPointWarning.value = false
+  proceedWithSubmit()
+}
+
+function handleCancelZeroPoint() {
+  showZeroPointWarning.value = false
 }
 </script>
 
@@ -274,6 +287,16 @@ async function handleSubmit() {
         </form>
       </section>
     </div>
+
+    <!-- Zero-Point Warning Dialog -->
+    <ConfirmDialog
+      v-if="showZeroPointWarning"
+      title="Log Zero Points?"
+      message="Points completed is 0. This will lower the team's average velocity. Continue?"
+      confirm-text="Log Sprint"
+      @confirm="handleConfirmZeroPoint"
+      @cancel="handleCancelZeroPoint"
+    />
   </div>
 </template>
 
@@ -283,12 +306,6 @@ async function handleSubmit() {
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-}
-
-/* Shared content width constraint */
-.content-width {
-  width: 100%;
-  max-width: 1000px;
 }
 
 /* Loading State */
@@ -359,30 +376,6 @@ async function handleSubmit() {
   margin-bottom: 2rem;
 }
 
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--f-text-primary, #333);
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--f-border-color, #e0e0e0);
-  border-radius: 9999px;
-  background: var(--f-background-primary, #fff);
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.back-link:hover {
-  background: var(--f-background-secondary, #f5f5f5);
-  border-color: var(--f-text-secondary, #666);
-  text-decoration: none;
-}
-
 .page-header h1 {
   margin: 0;
   font-size: 1.75rem;
@@ -437,76 +430,6 @@ async function handleSubmit() {
   border: 1px solid var(--f-border-color, #e0e0e0);
   border-radius: 8px;
   padding: 1.5rem;
-}
-
-/* Form Fields */
-.form-field {
-  margin-bottom: 1.25rem;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--f-text-primary, #333);
-}
-
-.required {
-  color: var(--f-error-color, #dc2626);
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.625rem 0.75rem;
-  font-size: 1rem;
-  border: 1px solid var(--f-border-color, #e0e0e0);
-  border-radius: 4px;
-  background: var(--f-background-primary, #fff);
-  color: var(--f-text-primary, #333);
-  transition: border-color 0.2s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--f-primary, #0066cc);
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
-}
-
-.form-input:disabled {
-  background: var(--f-background-secondary, #f5f5f5);
-  cursor: not-allowed;
-}
-
-.form-input.has-error {
-  border-color: var(--f-error-color, #dc2626);
-}
-
-.form-input.has-error:focus {
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
-}
-
-.field-error {
-  margin: 0.375rem 0 0 0;
-  font-size: 0.8125rem;
-  color: var(--f-error-color, #dc2626);
-}
-
-.field-hint {
-  margin: 0.375rem 0 0 0;
-  font-size: 0.8125rem;
-  color: var(--f-text-secondary, #666);
-}
-
-/* Submit Error */
-.submit-error {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: rgba(220, 38, 38, 0.1);
-  border: 1px solid var(--f-error-color, #dc2626);
-  border-radius: 4px;
-  color: var(--f-error-color, #dc2626);
-  font-size: 0.875rem;
 }
 
 /* Form Actions */

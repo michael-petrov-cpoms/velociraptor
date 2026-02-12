@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useTeamStore } from '@/stores/teamStore'
+import { useFocusTrap } from '@/composables/useFocusTrap'
 
 /**
  * Modal component for creating a new team.
@@ -13,6 +14,9 @@ const emit = defineEmits<{
 }>()
 
 const teamStore = useTeamStore()
+
+// Focus trap for accessibility
+const modalRef = ref<HTMLElement | null>(null)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Form State
@@ -150,6 +154,8 @@ async function handleSubmit() {
 /**
  * Handle modal close (cancel button or X button).
  */
+useFocusTrap(modalRef, handleClose)
+
 function handleClose() {
   if (!isSubmitting.value) {
     emit('close')
@@ -159,7 +165,13 @@ function handleClose() {
 
 <template>
   <div class="modal-overlay" @click.self="handleClose">
-    <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div
+      ref="modalRef"
+      class="modal-container"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
       <!-- Header -->
       <header class="modal-header">
         <h2 id="modal-title">Create Team</h2>
@@ -303,152 +315,13 @@ function handleClose() {
 </template>
 
 <style scoped>
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-/* Modal Container */
-.modal-container {
-  background: var(--f-background-primary, #fff);
-  border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 480px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-/* Modal Header */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--f-border-color, #e0e0e0);
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--f-text-primary, #333);
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--f-text-secondary, #666);
-  cursor: pointer;
-  padding: 0.25rem;
-  line-height: 1;
-}
-
-.close-button:hover:not(:disabled) {
-  color: var(--f-text-primary, #333);
-}
-
 .close-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Modal Body */
-.modal-body {
-  padding: 1.5rem;
-}
-
-/* Form Fields */
-.form-field {
-  margin-bottom: 1.25rem;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--f-text-primary, #333);
-}
-
-.required {
-  color: var(--f-error-color, #dc2626);
-}
-
 .optional {
   font-weight: 400;
   color: var(--f-text-secondary, #666);
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.625rem 0.75rem;
-  font-size: 1rem;
-  border: 1px solid var(--f-border-color, #e0e0e0);
-  border-radius: 4px;
-  background: var(--f-background-primary, #fff);
-  color: var(--f-text-primary, #333);
-  transition: border-color 0.2s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--f-primary, #0066cc);
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
-}
-
-.form-input:disabled {
-  background: var(--f-background-secondary, #f5f5f5);
-  cursor: not-allowed;
-}
-
-.form-input.has-error {
-  border-color: var(--f-error-color, #dc2626);
-}
-
-.form-input.has-error:focus {
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
-}
-
-.field-error {
-  margin: 0.375rem 0 0 0;
-  font-size: 0.8125rem;
-  color: var(--f-error-color, #dc2626);
-}
-
-.field-hint {
-  margin: 0.375rem 0 0 0;
-  font-size: 0.8125rem;
-  color: var(--f-text-secondary, #666);
-}
-
-/* Submit Error */
-.submit-error {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: rgba(220, 38, 38, 0.1);
-  border: 1px solid var(--f-error-color, #dc2626);
-  border-radius: 4px;
-  color: var(--f-error-color, #dc2626);
-  font-size: 0.875rem;
-}
-
-/* Modal Footer */
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--f-border-color, #e0e0e0);
 }
 </style>

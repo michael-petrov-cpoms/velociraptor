@@ -1,0 +1,74 @@
+/* Shared form styles — fields, labels, inputs, errors, hints */
+
+.form-field {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--f-text-primary, #333);
+}
+
+.required {
+  color: var(--f-error-color, #dc2626);
+}
+
+.optional {
+  color: var(--f-text-secondary, #666);
+  font-weight: 400;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--f-border-color, #e0e0e0);
+  border-radius: 4px;
+  background: var(--f-background-primary, #fff);
+  color: var(--f-text-primary, #333);
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--f-primary, #0066cc);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+.form-input:disabled {
+  background: var(--f-background-secondary, #f5f5f5);
+  cursor: not-allowed;
+}
+
+.form-input.has-error {
+  border-color: var(--f-error-color, #dc2626);
+}
+
+.form-input.has-error:focus {
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+}
+
+.field-error {
+  margin: 0.375rem 0 0 0;
+  font-size: 0.8125rem;
+  color: var(--f-error-color, #dc2626);
+}
+
+.field-hint {
+  margin: 0.375rem 0 0 0;
+  font-size: 0.8125rem;
+  color: var(--f-text-secondary, #666);
+}
+
+.submit-error {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid var(--f-error-color, #dc2626);
+  border-radius: 4px;
+  color: var(--f-error-color, #dc2626);
+  font-size: 0.875rem;
+}
