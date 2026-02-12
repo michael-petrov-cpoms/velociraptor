@@ -37,7 +37,7 @@ const safeTeam = computed<Team>(
       memberCount: 0,
       developerCount: 1,
       sprintLengthDays: 1,
-      createdAt: {} as Timestamp,
+      createdAt: Timestamp.now(),
     },
 )
 
@@ -282,12 +282,6 @@ function onInput() {
   padding: 2rem;
 }
 
-/* Shared content width constraint */
-.content-width {
-  width: 100%;
-  max-width: 1000px;
-}
-
 /* Loading State */
 .loading-container {
   display: flex;
@@ -354,30 +348,6 @@ function onInput() {
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 2rem;
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--f-text-primary, #333);
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--f-border-color, #e0e0e0);
-  border-radius: 9999px;
-  background: var(--f-background-primary, #fff);
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.back-link:hover {
-  background: var(--f-background-secondary, #f5f5f5);
-  border-color: var(--f-text-secondary, #666);
-  text-decoration: none;
 }
 
 .page-header h1 {
@@ -611,40 +581,5 @@ function onInput() {
   margin: 0;
   color: var(--f-text-secondary, #666);
   font-size: 0.9375rem;
-}
-
-/* Tooltip Styling */
-.has-tooltip {
-  cursor: help;
-  border-bottom: 1px dotted currentColor;
-  position: relative;
-}
-
-.has-tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0.5rem 0.75rem;
-  background: var(--f-text-primary, #333);
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1.4;
-  text-transform: none;
-  letter-spacing: normal;
-  white-space: normal;
-  width: max-content;
-  max-width: 260px;
-  border-radius: 6px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.1s ease;
-  z-index: 100;
-}
-
-.has-tooltip:hover::after {
-  opacity: 1;
 }
 </style>

@@ -21,7 +21,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "@raptor/feather-ui/_base.scss";`,
+        additionalData: `@use "@raptor/feather-ui/_base.scss" as *;`,
       },
     },
   },

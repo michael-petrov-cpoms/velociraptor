@@ -1,0 +1,35 @@
+/* Shared CSS-only tooltips via data-tooltip attribute */
+
+.has-tooltip {
+  cursor: help;
+  border-bottom: 1px dotted currentColor;
+  position: relative;
+}
+
+.has-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  background: var(--f-text-primary, #333);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: normal;
+  width: max-content;
+  max-width: 260px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease;
+  z-index: 100;
+}
+
+.has-tooltip:hover::after {
+  opacity: 1;
+}

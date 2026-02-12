@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import EditSprintModal from '../EditSprintModal.vue'
@@ -27,12 +27,18 @@ vi.mock('firebase/firestore', () => ({
   },
 }))
 
-// Stub FeatherUI button component
+// Stub FeatherUI button component and ConfirmDialog
 const globalStubs = {
   'f-button': {
     template: '<button :disabled="disabled" @click="$emit(\'click\')">{{ text }}</button>',
     props: ['text', 'type', 'disabled'],
     emits: ['click'],
+  },
+  ConfirmDialog: {
+    template:
+      '<div class="confirm-dialog" data-testid="confirm-dialog"><span class="dialog-message">{{ message }}</span><button class="confirm-btn" @click="$emit(\'confirm\')">{{ confirmText }}</button><button class="cancel-btn" @click="$emit(\'cancel\')">Cancel</button></div>',
+    props: ['title', 'message', 'confirmText', 'destructive'],
+    emits: ['confirm', 'cancel'],
   },
 }
 
@@ -75,18 +81,11 @@ function futureDateString(): string {
 describe('EditSprintModal', () => {
   let wrapper: VueWrapper
   let mockSprint: Sprint
-  let confirmSpy: ReturnType<typeof vi.spyOn>
 
   beforeEach(() => {
     mockUpdateSprint.mockReset()
     mockUpdateSprint.mockResolvedValue(undefined)
     mockSprint = createMockSprint()
-
-    confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
-  })
-
-  afterEach(() => {
-    confirmSpy.mockRestore()
   })
 
   function mountComponent(sprint: Sprint = mockSprint) {
@@ -341,42 +340,47 @@ describe('EditSprintModal', () => {
   // ───────────────────────────────────────────────────────────────────────────
 
   describe('Zero-Point Warning', () => {
-    it('shows window.confirm when pointsCompleted is 0', async () => {
+    it('shows ConfirmDialog when pointsCompleted is 0', async () => {
       mountComponent()
       await wrapper.find('#edit-points-completed').setValue(0)
       await clickSubmit()
 
-      expect(confirmSpy).toHaveBeenCalledWith(
-        "Points completed is 0. This will lower the team's average velocity. Continue?",
+      expect(wrapper.find('[data-testid="confirm-dialog"]').exists()).toBe(true)
+      expect(wrapper.find('.dialog-message').text()).toContain(
+        "This will lower the team's average velocity",
       )
     })
 
-    it('submits when user confirms zero points', async () => {
-      confirmSpy.mockReturnValue(true)
-
+    it('submits when user confirms zero-point warning', async () => {
       mountComponent()
       await wrapper.find('#edit-points-completed').setValue(0)
       await clickSubmit()
+
+      // Click confirm on the dialog
+      await wrapper.find('.confirm-btn').trigger('click')
       await nextTick()
 
       expect(mockUpdateSprint).toHaveBeenCalled()
     })
 
     it('does NOT submit when user cancels zero-point warning', async () => {
-      confirmSpy.mockReturnValue(false)
-
       mountComponent()
       await wrapper.find('#edit-points-completed').setValue(0)
       await clickSubmit()
 
+      // Click cancel on the dialog
+      await wrapper.find('.cancel-btn').trigger('click')
+      await nextTick()
+
       expect(mockUpdateSprint).not.toHaveBeenCalled()
+      expect(wrapper.find('[data-testid="confirm-dialog"]').exists()).toBe(false)
     })
 
-    it('does NOT show confirm for non-zero points', async () => {
+    it('does NOT show ConfirmDialog for non-zero points', async () => {
       mountComponent()
       await clickSubmit()
 
-      expect(confirmSpy).not.toHaveBeenCalled()
+      expect(wrapper.find('[data-testid="confirm-dialog"]').exists()).toBe(false)
     })
   })
 
@@ -631,11 +635,12 @@ describe('EditSprintModal', () => {
     })
 
     it('allows 0 points completed (with confirm)', async () => {
-      confirmSpy.mockReturnValue(true)
-
       mountComponent()
       await wrapper.find('#edit-points-completed').setValue(0)
       await clickSubmit()
+
+      // Confirm the zero-point warning dialog
+      await wrapper.find('.confirm-btn').trigger('click')
       await nextTick()
 
       expect(mockUpdateSprint).toHaveBeenCalledWith(

@@ -76,45 +76,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Modal Overlay — same pattern as CreateTeamModal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-/* Modal Container — smaller than form modals */
+/* Modal Container — override max-width for smaller confirm dialogs */
 .modal-container {
-  background: var(--f-background-primary, #fff);
-  border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 400px;
-}
-
-/* Modal Header */
-.modal-header {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--f-border-color, #e0e0e0);
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--f-text-primary, #333);
-}
-
-/* Modal Body */
-.modal-body {
-  padding: 1.5rem;
+  --modal-max-width: 400px;
+  max-height: none;
+  overflow-y: visible;
 }
 
 .confirm-message {
@@ -122,15 +88,6 @@ onMounted(() => {
   font-size: 0.9375rem;
   line-height: 1.5;
   color: var(--f-text-primary, #333);
-}
-
-/* Modal Footer */
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--f-border-color, #e0e0e0);
 }
 
 /* Buttons */

@@ -103,12 +103,6 @@ const teamsWithStats = computed(() =>
   padding: 2rem;
 }
 
-/* Shared content width constraint */
-.content-width {
-  width: 100%;
-  max-width: 1000px;
-}
-
 .home-header {
   display: flex;
   justify-content: space-between;
